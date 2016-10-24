@@ -3,17 +3,36 @@ package pieces;
 public class Pawn extends Piece{
 	
 	public Pawn(char BW){
+		this.BW=BW;
 		this.ID=" "+BW+"p"+" ";
 	}
 	
-	public String movement(String ID){
-		if(ID.charAt(2)=='w'){
+	public String move(Piece[][] newboard, int srcrow, int srccol, int destrow, int destcol){
+			if((BW=='w' && srcrow-1==destrow)||(BW=='b' && srcrow+1==destrow)){
+				if(newboard[destrow][destcol] instanceof BoardNull){
+					newboard[destrow][destcol]=newboard[srcrow][srccol];
+					newboard[srcrow][srccol]=new BoardNull(srcrow,srccol);
+					return null;
+				}
+			}
+			else if((srcrow-2==destrow && srccol==destcol) || (srcrow+2==destrow && srccol==destcol)){
+				if(BW=='w'){
+					if(newboard[destrow][destcol] instanceof BoardNull && newboard[destrow-1][destcol] instanceof BoardNull){
+						newboard[destrow][destcol]=newboard[srcrow][srccol];
+						newboard[srcrow][srccol]=new BoardNull(srcrow,srccol);
+						return null;
+					}
+				}
+				else if(BW=='b'){
+					if(newboard[destrow][destcol] instanceof BoardNull && newboard[destrow+1][destcol] instanceof BoardNull){
+						newboard[destrow][destcol]=newboard[srcrow][srccol];
+						newboard[srcrow][srccol]=new BoardNull(srcrow,srccol);
+						return null;
+					}
+				}
+			}
 			
-		}
-		else if(ID.charAt(2)=='b'){
-			
-		}
-		return "";
+			return "Invalid Move. Try Again.\n";
 	}
 	
 }
