@@ -1,9 +1,9 @@
 package pieces;
 
-public class Pawn extends Piece{
-	
-	public Pawn(char BW){
-		this.ID=" "+BW+"p"+" ";
+public class King extends Piece {
+
+	public King(char BW){
+		this.ID=" "+BW+"K"+" ";
 	}
 	
 	public String movement(String ID){
@@ -15,5 +15,4 @@ public class Pawn extends Piece{
 		}
 		return "";
 	}
-	
 }
