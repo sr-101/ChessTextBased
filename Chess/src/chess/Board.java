@@ -108,7 +108,7 @@ public class Board {
 			Piece source=newboard[srcrow][srccol];
 			if(source.BW==turnBorW && source.BW!='X'){
 				//System.out.println(source.ID);
-				Piece destination=newboard[destrow][destcol];
+				//Piece destination=newboard[destrow][destcol];
 				//System.out.println(destination.ID);
 				String s=source.move(newboard, srcrow, srccol, destrow, destcol);
 			
