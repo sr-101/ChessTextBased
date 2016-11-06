@@ -60,6 +60,7 @@ public class Rook extends Piece {
 				} else if((newboard[destrow][destcol]).BW!=BW){ //piece in destination is different color 
 					newboard[destrow][destcol]=newboard[srcrow][srccol];
 					newboard[srcrow][srccol]=new BoardNull(srcrow,srccol);
+					moved=true;
 					return null;
 				}
 			}
@@ -67,6 +68,7 @@ public class Rook extends Piece {
 			if(isEmpty==true){ // went through all for loops looking for a not-empty spot and found none
 				newboard[destrow][destcol]=newboard[srcrow][srccol];
 				newboard[srcrow][srccol]=new BoardNull(srcrow,srccol);
+				moved=true;
 				return null;
 			}
 			

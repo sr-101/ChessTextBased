@@ -14,6 +14,7 @@ public class Board {
 	Piece[][] newboard=new Piece[9][9];
 	boolean checkmate=false;
 	boolean stalemate=false;
+	public static boolean castling=false;
 	char turnBorW='w';
 
 	public Board(){
