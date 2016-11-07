@@ -7,6 +7,142 @@ public class King extends Piece {
 		this.ID=" "+BW+"K"+" ";
 	}
 	
+	public boolean isInCheck(Piece[][] newboard, int srcrow, int srccol){
+		boolean isInCheck=false;
+		
+        //isInCheck by Bishop or Queen?
+		for(int r=srcrow+1; r<9; r++){ //bishop up to right
+        	for (int c=srccol+1; c<9; c++){
+        		if((!(newboard[r][c] instanceof BoardNull)) && (newboard[r][c].BW!=BW) && ( (newboard[r][c].ID=="B") || (newboard[r][c].ID=="Q"))){ //there is nothing between a bishop of another color and the king
+        			isInCheck=true;
+        		}
+        	}
+        }
+        
+        for(int r=srcrow+1; r<9; r++){ //bishop up to left 
+        	for (int c=srccol-1; c>0; c--){
+        		if((!(newboard[r][c] instanceof BoardNull)) && (newboard[r][c].BW!=BW) && ( (newboard[r][c].ID=="B") || (newboard[r][c].ID=="Q"))){ //there is nothing between a bishop of another color and the king
+        			isInCheck=true;
+        		}
+        	}
+        }
+        
+        for(int r=srcrow-1; r>0; r--){ //bishop down to right 
+        	for (int c=srccol+1; c<9; c++){
+        		if((!(newboard[r][c] instanceof BoardNull)) && (newboard[r][c].BW!=BW) && ( (newboard[r][c].ID=="B") || (newboard[r][c].ID=="Q"))){ //there is nothing between a bishop of another color and the king
+        			isInCheck=true;
+        		}
+        	}
+        }
+        
+        for(int r=srcrow-1; r>0; r--){ //bishop down to left 
+        	for (int c=srccol-1; c>0; c--){
+        		if((!(newboard[r][c] instanceof BoardNull)) && (newboard[r][c].BW!=BW) && ( (newboard[r][c].ID=="B") || (newboard[r][c].ID=="Q"))){ //there is nothing between a bishop of another color and the king
+        			isInCheck=true;
+        		}
+        	}
+        }
+        
+        //isInCheck by Rook or Queen?
+        for(int r=srcrow+1; r<9; r++){ //up
+        	if((!(newboard[r][srccol] instanceof BoardNull)) && (newboard[r][srccol].BW!=BW) && ( (newboard[r][srccol].ID=="R") || (newboard[r][srccol].ID=="Q"))){ //there is nothing between a rook of another color and the king
+    			isInCheck=true;
+        	}
+        }
+        
+        for(int r=srcrow-1; r>0; r--){ //down
+        	if((!(newboard[r][srccol] instanceof BoardNull)) && (newboard[r][srccol].BW!=BW) && ( (newboard[r][srccol].ID=="R") || (newboard[r][srccol].ID=="Q"))){ //there is nothing between a rook of another color and the king
+    			isInCheck=true;
+        	}
+        }
+        
+        for(int c=srccol+1; c<9; c++){ //right
+        	if((!(newboard[srcrow][c] instanceof BoardNull)) && (newboard[srcrow][c].BW!=BW) && ( (newboard[srcrow][c].ID=="R") || (newboard[srcrow][c].ID=="Q"))){ //there is nothing between a rook of another color and the king
+    			isInCheck=true;
+        	}
+        }
+		
+        for(int c=srccol-1; c>0; c--){ //left
+        	if((!(newboard[srcrow][c] instanceof BoardNull)) && (newboard[srcrow][c].BW!=BW) && ( (newboard[srcrow][c].ID=="R") || (newboard[srcrow][c].ID=="Q"))){ //there is nothing between a rook of another color and the king
+    			isInCheck=true;
+        	}
+        }
+        
+        //isInCheck by Pawn?
+        if(BW=='w'){ //king is white so only check up left and right
+             if((!(newboard[srcrow+1][srccol+1] instanceof BoardNull)) && (newboard[srcrow+1][srccol+1].BW!=BW) &&  (newboard[srcrow+1][srccol+1].ID=="P") ){ //there is nothing between a pawn of another color and the king
+         			isInCheck=true;	
+             	}
+             if((!(newboard[srcrow+1][srccol-1] instanceof BoardNull)) && (newboard[srcrow+1][srccol-1].BW!=BW) &&  (newboard[srcrow+1][srccol-1].ID=="P") ){ //there is nothing between a pawn of another color and the king
+      			isInCheck=true;	
+          	} 
+        }
+        
+        if(BW=='b'){
+        	if((!(newboard[srcrow-1][srccol+1] instanceof BoardNull)) && (newboard[srcrow-1][srccol+1].BW!=BW) &&  (newboard[srcrow-1][srccol+1].ID=="P") ){ //there is nothing between a pawn of another color and the king
+     			isInCheck=true;	
+         	}
+        	
+        	if((!(newboard[srcrow-1][srccol-1] instanceof BoardNull)) && (newboard[srcrow-1][srccol-1].BW!=BW) &&  (newboard[srcrow-1][srccol-1].ID=="P") ){ //there is nothing between a pawn of another color and the king
+     			isInCheck=true;	
+         	}
+        }
+       
+        //isInCheck by King?
+        //right
+        if((!(newboard[srcrow][srccol+1] instanceof BoardNull)) && (newboard[srcrow][srccol+1].BW!=BW) &&  (newboard[srcrow][srccol+1].ID=="K") ){ //there is nothing between a king of another color and the king
+ 			isInCheck=true;	
+     	}
+        //left
+        if((!(newboard[srcrow][srccol-1] instanceof BoardNull)) && (newboard[srcrow][srccol-1].BW!=BW) &&  (newboard[srcrow][srccol-1].ID=="K") ){ //there is nothing between a king of another color and the king
+ 			isInCheck=true;	
+     	}
+        //up
+        if((!(newboard[srcrow+1][srccol] instanceof BoardNull)) && (newboard[srcrow+1][srccol].BW!=BW) &&  (newboard[srcrow+1][srccol].ID=="K") ){ //there is nothing between a king of another color and the king
+ 			isInCheck=true;	
+     	}
+        //down
+        if((!(newboard[srcrow-1][srccol] instanceof BoardNull)) && (newboard[srcrow-1][srccol].BW!=BW) &&  (newboard[srcrow-1][srccol].ID=="K") ){ //there is nothing between a king of another color and the king
+ 			isInCheck=true;	
+     	}
+        
+        //isInCheck by Knight?
+        if((!(newboard[srcrow-1][srccol-2] instanceof BoardNull)) && (newboard[srcrow-1][srccol-2].BW!=BW) &&  (newboard[srcrow-1][srccol-2].ID=="N") ){ //there is nothing between a knight of another color and the king
+ 			isInCheck=true;	
+     	}
+        
+        if((!(newboard[srcrow-1][srccol+2] instanceof BoardNull)) && (newboard[srcrow-1][srccol+2].BW!=BW) &&  (newboard[srcrow-1][srccol+2].ID=="N") ){ //there is nothing between a knight of another color and the king
+ 			isInCheck=true;	
+     	}
+        
+        if((!(newboard[srcrow-2][srccol-1] instanceof BoardNull)) && (newboard[srcrow-2][srccol-1].BW!=BW) &&  (newboard[srcrow-2][srccol-1].ID=="N") ){ //there is nothing between a knight of another color and the king
+ 			isInCheck=true;	
+     	}
+        
+        if((!(newboard[srcrow-2][srccol+1] instanceof BoardNull)) && (newboard[srcrow-2][srccol+1].BW!=BW) &&  (newboard[srcrow-2][srccol+1].ID=="N") ){ //there is nothing between a knight of another color and the king
+ 			isInCheck=true;	
+     	}
+        
+        if((!(newboard[srcrow+1][srccol-2] instanceof BoardNull)) && (newboard[srcrow+1][srccol-2].BW!=BW) &&  (newboard[srcrow+1][srccol-2].ID=="N") ){ //there is nothing between a knight of another color and the king
+ 			isInCheck=true;	
+     	}
+        
+        if((!(newboard[srcrow+1][srccol+2] instanceof BoardNull)) && (newboard[srcrow+1][srccol+2].BW!=BW) &&  (newboard[srcrow+1][srccol+2].ID=="N") ){ //there is nothing between a knight of another color and the king
+ 			isInCheck=true;	
+     	}
+        
+        if((!(newboard[srcrow+2][srccol-1] instanceof BoardNull)) && (newboard[srcrow+2][srccol-1].BW!=BW) &&  (newboard[srcrow+2][srccol-1].ID=="N") ){ //there is nothing between a knight of another color and the king
+ 			isInCheck=true;	
+     	}
+        
+        if((!(newboard[srcrow+2][srccol+1] instanceof BoardNull)) && (newboard[srcrow+2][srccol+1].BW!=BW) &&  (newboard[srcrow+2][srccol+1].ID=="N") ){ //there is nothing between a knight of another color and the king
+ 			isInCheck=true;	
+     	}
+        
+        
+		return isInCheck;
+	}
+	
 	public String move(Piece[][] newboard, int srcrow, int srccol, int destrow, int destcol){ //is empty space, so move up, down, left or right one space?
 		if(
 			(srcrow-1==destrow && srccol==destcol) || (srcrow+1==destrow && srccol==destcol) ||
