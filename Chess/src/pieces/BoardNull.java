@@ -3,7 +3,7 @@ package pieces;
 public class BoardNull extends Piece{
 
 	public BoardNull(int i,int j){
-		this.BW='X';
+		this.color='X';
 		if(j==8 && i<8){
 			this.ID=(8-i+"");
 		}

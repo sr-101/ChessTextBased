@@ -1,5 +1,6 @@
 package chess;
 
+import java.util.ArrayList;
 import pieces.Bishop;
 import pieces.BoardNull;
 import pieces.King;
@@ -11,11 +12,13 @@ import pieces.Rook;
 
 public class Board {
 
-	Piece[][] newboard=new Piece[9][9];
+	static Piece[][] newboard=new Piece[9][9];
 	boolean checkmate=false;
 	boolean stalemate=false;
 	public static boolean castling=false;
 	char turnBorW='w';
+	public static int[] bKing={0,4};
+	public static int[] wKing={7,3};
 
 	public Board(){
 		for(int i=0;i<=8;i++){
@@ -107,7 +110,7 @@ public class Board {
 		int destcol=dest.charAt(0)-97;
 		if((srcrow>=0 && srcrow<=8) && (destrow>=0 && destrow<=8) && (srccol>=0 && srccol<=8) && (destcol>=0 && destcol<=8)){
 			Piece source=newboard[srcrow][srccol];
-			if(source.BW==turnBorW && source.BW!='X'){
+			if(source.color==turnBorW && source.color!='X'){
 				//System.out.println(source.ID);
 				//Piece destination=newboard[destrow][destcol];
 				//System.out.println(destination.ID);
@@ -126,7 +129,7 @@ public class Board {
 			else{
 				success=-2;
 				printBoard();
-				if(source.BW=='X'){
+				if(source.color=='X'){
 					System.out.println("You selected an empty space. Try again.\n");
 				}
 				else{
@@ -140,5 +143,68 @@ public class Board {
 			System.out.println("Selection is off the board. Try again.");
 		}
 		return success;
+	}
+	
+	
+	public static String isKingInCheck(char color){
+		ArrayList<Piece> result;
+		if(color=='b'){
+			result=isInCheck(bKing);
+			if (!result.isEmpty()){
+				return "You are in check from: " + result.toArray().toString(); 
+			}
+			return "Not in Check";
+		}
+		else if(color=='w'){
+			result=isInCheck(wKing);
+			if (!result.isEmpty()){
+				return "You are in check from: " + result.toArray().toString(); 
+			}
+			return "Not in Check";
+		}
+		return null;
+	}
+	
+	public static ArrayList<Piece> isInCheck(int[] kingloc){
+		ArrayList<Piece> locofCheck=new ArrayList<Piece>();
+		int d=0;
+		int e=0;
+		int srcrow=kingloc[0];
+		int srccol=kingloc[1];
+		King king=(King) newboard[kingloc[0]][kingloc[1]];
+		
+        //isInCheck by Bishop or Queen?
+		for(int r=srcrow+1; r<9; r++){ 
+			int c=srccol;
+        	if(c+d<=7){
+        		if((!(newboard[r][c+d] instanceof BoardNull)) && (newboard[r][c+d].color!=king.color) && ((newboard[r][c+d].ID.contains("B") || (newboard[r][c+d].ID.contains("Q"))))){ //there is nothing between a bishop of another color and the king
+        			locofCheck.add(newboard[r][c+d]);
+        		}
+        		d++;
+        	}
+        	if(c-e>=0){
+        		if((!(newboard[r][c-e] instanceof BoardNull)) && (newboard[r][c-e].color!=king.color) && ((newboard[r][c-e].ID.contains("B") || (newboard[r][c-e].ID.contains("Q"))))){ //there is nothing between a bishop of another color and the king
+        			locofCheck.add(newboard[r][c-e]);
+        		}
+        		e++;
+        	}
+        }
+		
+		for(int r=srcrow-1; r>=0; r--){ 
+			int c=srccol;
+        	if(c+d<=7){
+        		if((!(newboard[r][c+d] instanceof BoardNull)) && (newboard[r][c+d].color!=king.color) && ((newboard[r][c+d].ID.contains("B") || (newboard[r][c+d].ID.contains("Q"))))){ //there is nothing between a bishop of another color and the king
+        			locofCheck.add(newboard[r][c+d]);
+        		}
+        		d++;
+        	}
+        	if(c-e>=0){
+        		if((!(newboard[r][c-e] instanceof BoardNull)) && (newboard[r][c-e].color!=king.color) && ((newboard[r][c-e].ID.contains("B") || (newboard[r][c-e].ID.contains("Q"))))){ //there is nothing between a bishop of another color and the king
+        			locofCheck.add(newboard[r][c-e]);
+        		}
+        		e++;
+        	}
+        }
+		return locofCheck;
 	}
 }
