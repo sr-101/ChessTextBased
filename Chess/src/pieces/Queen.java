@@ -2,9 +2,9 @@ package pieces;
 
 public class Queen extends Piece {
 
-	public Queen(char BW){
-		this.BW=BW;
-		this.ID=" "+BW+"Q"+" ";
+	public Queen(char color){
+		this.color=color;
+		this.ID=" "+color+"Q"+" ";
 	}
 	
 	public String move(Piece[][] newboard, int srcrow, int srccol, int destrow, int destcol){
@@ -56,9 +56,9 @@ public class Queen extends Piece {
 			}
 			
 			if(!(newboard[destrow][destcol] instanceof BoardNull)){ //actual destination is not empty
-				if((newboard[destrow][destcol]).BW==BW){ //piece in destination is same color as piece of player
+				if((newboard[destrow][destcol]).color==color){ //piece in destination is same color as piece of player
 					return "Invalid Move. Try Again.\n";
-				} else if((newboard[destrow][destcol]).BW!=BW){ //piece in destination is different color 
+				} else if((newboard[destrow][destcol]).color!=color){ //piece in destination is different color 
 					newboard[destrow][destcol]=newboard[srcrow][srccol];
 					newboard[srcrow][srccol]=new BoardNull(srcrow,srccol);
 					return null;
@@ -74,7 +74,7 @@ public class Queen extends Piece {
 		}
 		else if(v==h){ //moves like bishop
 			
-			if(srcrow<destrow && srccol<destcol){ // diagonal up to right
+			if(srcrow>destrow && srccol<destcol){ // diagonal up to right
 				int d=0; //check up right
 				for(int row=srcrow+1;row<destrow;row++){
 					int col=srccol;
@@ -88,7 +88,7 @@ public class Queen extends Piece {
 				}  
 			} 
 
-			if(srcrow<destrow && srccol>destcol){ // diagonal up to left
+			if(srcrow>destrow && srccol>destcol){ // diagonal up to left
 				int d=0; //check up right
 				for(int row=srcrow+1;row<destrow;row++){
 					int col=srccol;
@@ -102,7 +102,7 @@ public class Queen extends Piece {
 				}
 			}
 			
-			if(srcrow>destrow && srccol<destcol){ // diagonal down to right
+			if(srcrow<destrow && srccol<destcol){ // diagonal down to right
 				int d=0; //check up right
 				for(int row=srcrow-1;row>destrow;row--){
 					int col=srccol;
@@ -116,7 +116,7 @@ public class Queen extends Piece {
 				}  
 			} 
 
-			if(srcrow>destrow && srccol>destcol){ // diagonal down to left
+			if(srcrow<destrow && srccol>destcol){ // diagonal down to left
 				int d=0; 
 				for(int row=srcrow-1;row>destrow;row--){
 					int col=srccol;
@@ -131,9 +131,9 @@ public class Queen extends Piece {
 			}
 			
 			if(!(newboard[destrow][destcol] instanceof BoardNull)){ //actual destination is not empty
-				if((newboard[destrow][destcol]).BW==BW){ //piece in destination is same color as piece of player
+				if((newboard[destrow][destcol]).color==color){ //piece in destination is same color as piece of player
 					return "Invalid Move. Try Again.\n";
-				} else if((newboard[destrow][destcol]).BW!=BW){ //piece in destination is different color 
+				} else if((newboard[destrow][destcol]).color!=color){ //piece in destination is different color 
 					newboard[destrow][destcol]=newboard[srcrow][srccol];
 					newboard[srcrow][srccol]=new BoardNull(srcrow,srccol);
 					return null;

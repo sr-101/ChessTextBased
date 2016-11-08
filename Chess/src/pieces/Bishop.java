@@ -3,7 +3,7 @@ package pieces;
 public class Bishop extends Piece {
 
 	public Bishop(char BW){
-		this.BW=BW;
+		this.color=BW;
 		this.ID=" "+BW+"B"+" ";
 	}
 	
@@ -16,7 +16,7 @@ public class Bishop extends Piece {
     
 	if(v==h){ //square
 		
-		if(srcrow<destrow && srccol<destcol){ // diagonal up to right
+		if(srcrow>destrow && srccol<destcol){ // diagonal up to right
 			int d=0; //check up right
 			for(int r=srcrow+1;r<destrow;r++){
 				int c=srccol;
@@ -30,7 +30,7 @@ public class Bishop extends Piece {
 			}  
 		} 
 
-		if(srcrow<destrow && srccol>destcol){ // diagonal up to left
+		if(srcrow>destrow && srccol>destcol){ // diagonal up to left
 			int d=0; //check up right
 			for(int r=srcrow+1;r<destrow;r++){
 				int c=srccol;
@@ -44,7 +44,7 @@ public class Bishop extends Piece {
 			}
 		}
 		
-		if(srcrow>destrow && srccol<destcol){ // diagonal down to right
+		if(srcrow<destrow && srccol<destcol){ // diagonal down to right
 			int d=0; //check up right
 			for(int r=srcrow-1;r>destrow;r--){
 				int c=srccol;
@@ -58,7 +58,7 @@ public class Bishop extends Piece {
 			}  
 		} 
 
-		if(srcrow>destrow && srccol>destcol){ // diagonal down to left
+		if(srcrow<destrow && srccol>destcol){ // diagonal down to left
 			int d=0; 
 			for(int r=srcrow-1;r>destrow;r--){
 				int c=srccol;
@@ -73,9 +73,9 @@ public class Bishop extends Piece {
 		}
 		
 		if(!(newboard[destrow][destcol] instanceof BoardNull)){ //actual destination is not empty
-			if((newboard[destrow][destcol]).BW==BW){ //piece in destination is same color as piece of player
+			if((newboard[destrow][destcol]).color==color){ //piece in destination is same color as piece of player
 				return "Invalid Move. Try Again.\n";
-			} else if((newboard[destrow][destcol]).BW!=BW){ //piece in destination is different color 
+			} else if((newboard[destrow][destcol]).color!=color){ //piece in destination is different color 
 				newboard[destrow][destcol]=newboard[srcrow][srccol];
 				newboard[srcrow][srccol]=new BoardNull(srcrow,srccol);
 				return null;
@@ -91,7 +91,7 @@ public class Bishop extends Piece {
 	} 
 
 	else if(v!=h){
-		return "Invalid Move. Try Again.\n";
+		return "V not equal to H \n";
 	}
 	
 	

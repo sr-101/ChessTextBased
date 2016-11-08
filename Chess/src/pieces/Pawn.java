@@ -2,9 +2,9 @@ package pieces;
 
 public class Pawn extends Piece{
 	
-	public Pawn(char BW){
-		this.BW=BW;
-		this.ID=" "+BW+"p"+" ";
+	public Pawn(char color){
+		this.color=color;
+		this.ID=" "+color+"p"+" ";
 	}
 	
 	//public void enPassant(Piece[][] newboard, int destrow, int destcol, int epr, int epc){
@@ -15,7 +15,7 @@ public class Pawn extends Piece{
 	
 	public String pawnPromotion(Piece[][] newboard, int destrow, int destcol){
 		char pro=chess.Board.promotion;
-		char col=newboard[destrow][destcol].BW;
+		char col=newboard[destrow][destcol].color;
 		
 		if(pro=='Q'){
 			if(col=='b'){
@@ -64,7 +64,7 @@ public class Pawn extends Piece{
 	
 	public String move(Piece[][] newboard, int srcrow, int srccol, int destrow, int destcol){
 	//	if(chess.Board.enPassant==false){
-			if((BW=='w' && srcrow-1==destrow)||(BW=='b' && srcrow+1==destrow)){
+			if((color=='w' && srcrow-1==destrow)||(color=='b' && srcrow+1==destrow)){
 				if(newboard[destrow][destcol] instanceof BoardNull && (srccol==destcol)){  
 					newboard[destrow][destcol]=newboard[srcrow][srccol];
 					newboard[srcrow][srccol]=new BoardNull(srcrow,srccol);
@@ -85,7 +85,7 @@ public class Pawn extends Piece{
 				}
 			}
 			else if(moved==false && ((srcrow-2==destrow && srccol==destcol) || (srcrow+2==destrow && srccol==destcol))){  
-				if(BW=='w'){
+				if(color=='w'){
 					if(newboard[destrow][destcol] instanceof BoardNull && newboard[destrow+1][destcol] instanceof BoardNull){
 						newboard[destrow][destcol]=newboard[srcrow][srccol];
 						newboard[srcrow][srccol]=new BoardNull(srcrow,srccol);
@@ -93,7 +93,7 @@ public class Pawn extends Piece{
 						return null;
 					}
 				}
-				else if(BW=='b'){
+				else if(color=='b'){
 					if(newboard[destrow][destcol] instanceof BoardNull && newboard[destrow-1][destcol] instanceof BoardNull){
 						newboard[destrow][destcol]=newboard[srcrow][srccol];
 						newboard[srcrow][srccol]=new BoardNull(srcrow,srccol);

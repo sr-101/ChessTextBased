@@ -19,6 +19,7 @@ public class Board {
 	char turnBorW='w';
 	public static int[] bKing={0,4};
 	public static int[] wKing={7,3};
+	public static char promotion;
 
 	public Board(){
 		for(int i=0;i<=8;i++){
@@ -151,14 +152,22 @@ public class Board {
 		if(color=='b'){
 			result=isInCheck(bKing);
 			if (!result.isEmpty()){
-				return "You are in check from: " + result.toArray().toString(); 
+				StringBuilder s=new StringBuilder();
+				for(int i=0;i<result.size();i++){
+					s.append("\nYou are in check from: ").append(result.get(i));
+				}
+				return s.toString(); 
 			}
 			return "Not in Check";
 		}
 		else if(color=='w'){
 			result=isInCheck(wKing);
 			if (!result.isEmpty()){
-				return "You are in check from: " + result.toArray().toString(); 
+				StringBuilder s=new StringBuilder();
+				for(int i=0;i<result.size();i++){
+					s.append("\nYou are in check from: ").append(result.get(i));
+				}
+				return s.toString();
 			}
 			return "Not in Check";
 		}
@@ -174,7 +183,7 @@ public class Board {
 		King king=(King) newboard[kingloc[0]][kingloc[1]];
 		
         //isInCheck by Bishop or Queen?
-		for(int r=srcrow+1; r<9; r++){ 
+		for(int r=srcrow+1; r<8; r++){ 
 			int c=srccol;
         	if(c+d<=7){
         		if((!(newboard[r][c+d] instanceof BoardNull)) && (newboard[r][c+d].color!=king.color) && ((newboard[r][c+d].ID.contains("B") || (newboard[r][c+d].ID.contains("Q"))))){ //there is nothing between a bishop of another color and the king
@@ -187,6 +196,10 @@ public class Board {
         			locofCheck.add(newboard[r][c-e]);
         		}
         		e++;
+        	}
+        	if(c-e==0 && c+d==7){
+        		d=0;
+        		e=0;
         	}
         }
 		
@@ -203,6 +216,10 @@ public class Board {
         			locofCheck.add(newboard[r][c-e]);
         		}
         		e++;
+        	}
+        	if(c-e==0 && c+d==7){
+        		d=0;
+        		e=0;
         	}
         }
 		return locofCheck;
