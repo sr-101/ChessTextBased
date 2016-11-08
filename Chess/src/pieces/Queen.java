@@ -3,7 +3,7 @@ package pieces;
 public class Queen extends Piece {
 
 	public Queen(char BW){
-		this.color=BW;
+		this.BW=BW;
 		this.ID=" "+BW+"Q"+" ";
 	}
 	

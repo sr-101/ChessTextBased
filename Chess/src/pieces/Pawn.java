@@ -3,7 +3,7 @@ package pieces;
 public class Pawn extends Piece{
 	
 	public Pawn(char BW){
-		this.color=BW;
+		this.BW=BW;
 		this.ID=" "+BW+"p"+" ";
 	}
 	
