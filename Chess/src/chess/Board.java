@@ -158,22 +158,26 @@ public class Board {
 	
 	
 	public static String allowEnpassant(Piece[][] p, int srcrow, int srccol, int destrow, int destcol){
+		//boolean nextMoveEP=false;
 		int epc=0;
 		
-		if(p[srcrow][srccol-1] instanceof Pawn && ((Pawn)p[srcrow][srccol-1]).enpassant){
+		if((srccol>0) && (p[srcrow][srccol-1] instanceof Pawn) && (((Pawn)p[srcrow][srccol-1]).enpassant==true)){
 			epc=srccol-1;
 		}
 			
-		if(p[srcrow][srccol+1] instanceof Pawn && ((Pawn)p[srcrow][srccol+1]).enpassant){
+		if((srccol<7) && (p[srcrow][srccol+1] instanceof Pawn) && (((Pawn)p[srcrow][srccol+1]).enpassant==true)){
 			epc=srccol+1;
 		}
 		
-		if((p[srcrow][srccol] instanceof Pawn) && (destrow==srcrow+1) && (destcol==epc)){
+		if((p[srcrow][srccol] instanceof Pawn) && (((destrow==srcrow+1) && p[srcrow][srccol].color=='b')||((destrow==srcrow-1) && p[srcrow][srccol].color=='w')) && (destcol==epc)){
 			nextMoveEP=true;
+			return null;
 		}
-		
-		return "Invalid Move. Try Again.\n";
+		//nextMoveEP=false;
+		return "in allowenpassant - Invalid Move. Try Again.\n";
+	//return nextMoveEP;
 	}
+	
 	
 	public static String isKingInCheck(char color){
 		ArrayList<Piece> result;
