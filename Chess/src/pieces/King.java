@@ -60,13 +60,13 @@ public class King extends Piece {
 				(newboard[destrow][destcol].ID.contains("R")) && //there's a Rook
 				(newboard[destrow][destcol].color==color) && //Rook is same color as King we want to move
 				(newboard[destrow][destcol].moved==false) && //Rook has also not moved 
-				(Board.isKingInCheck(color)==null) && //king is not in check
-				(Board.isKingInCheck(color)==null) //destination is not in check
+				(Board.getKingBoolean(color)) && //king is not in check
+				(Board.getKingBoolean(newboard[destrow][destcol].color)) //destination is not in check
 				) 
 			{
 				int c=srccol;
 				for(;c<destcol; c++){
-					if((!(newboard[srcrow][c] instanceof BoardNull)) || !(Board.isKingInCheck(color)==null)){ //there is a piece b/w king and rook or king will pass through a space that is in check
+					if((!(newboard[srcrow][c] instanceof BoardNull)) || !(Board.getKingBoolean(newboard[srcrow][c].color))){ //there is a piece b/w king and rook or king will pass through a space that is in check
 						return "Invalid Move. Try Again.\n";
 					}
 				}
