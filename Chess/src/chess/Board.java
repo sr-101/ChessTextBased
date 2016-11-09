@@ -119,7 +119,7 @@ public class Board {
 				//Piece destination=newboard[destrow][destcol];
 				//System.out.println(destination.ID);
 				String s="";
-				
+
 				if(isKingInCheck('w') != null || isKingInCheck('b')!=null){
 					if(isKingInCheck('w') != null){
 						Piece temp=newboard[destrow][destcol];
@@ -138,7 +138,7 @@ public class Board {
 								printBoard();
 							}
 						}
-					} 
+					}
 					else if(isKingInCheck('b')!=null){
 						Piece temp=newboard[destrow][destcol];
 						Piece temp2=newboard[srcrow][srccol];
@@ -159,38 +159,38 @@ public class Board {
 					}
 				}
 				else{
-					if(Board.nextMoveEP==true && Board.allowEnpassant(newboard, srcrow, srccol, destrow, destcol)!=null){
-						s="Enpassant Not Allowed";
-					}
-					else if(Board.nextMoveEP==true && Board.allowEnpassant(newboard, srcrow, srccol, destrow, destcol)==null){
-						s=source.move(newboard, srcrow, srccol, destrow, destcol);
-					}
-					else if (Board.nextMoveEP==false){
-						s=source.move(newboard, srcrow, srccol, destrow, destcol);
-					}
-				
-					if(s==null){
-						success=0;
-						printBoard();
-					}
-					else{
-						success=-1;
-						printBoard();
-						System.out.println(s);
-					}
+				if(Board.nextMoveEP==true && Board.allowEnpassant(newboard, srcrow, srccol, destrow, destcol)!=null){
+					s="Enpassant Not Allowed";
 				}
+				else if(Board.nextMoveEP==true && Board.allowEnpassant(newboard, srcrow, srccol, destrow, destcol)==null){
+					s=source.move(newboard, srcrow, srccol, destrow, destcol);
+				}
+				else if (Board.nextMoveEP==false){
+					s=source.move(newboard, srcrow, srccol, destrow, destcol);
+				}
+			
+				if(s==null){
+					success=0;
+					printBoard();
 				}
 				else{
-					success=-2;
+					success=-1;
 					printBoard();
-					if(source.color=='X'){
-						System.out.println("You selected an empty space. Try again.\n");
-					}
-					else{
-						System.out.println("You selected the opponent's piece. Try again.\n");
-					}
+					System.out.println(s);
 				}
 			}
+				}
+			else{
+				success=-2;
+				printBoard();
+				if(source.color=='X'){
+					System.out.println("You selected an empty space. Try again.\n");
+				}
+				else{
+					System.out.println("You selected the opponent's piece. Try again.\n");
+				}
+			}
+		}
 		else{
 			success=-3;
 			printBoard();
@@ -201,21 +201,24 @@ public class Board {
 	
 	
 	public static String allowEnpassant(Piece[][] p, int srcrow, int srccol, int destrow, int destcol){
+		//boolean nextMoveEP=false;
 		int epc=0;
 		
-		if(p[srcrow][srccol-1] instanceof Pawn && ((Pawn)p[srcrow][srccol-1]).enpassant){
+		if((srccol>0) && (p[srcrow][srccol-1] instanceof Pawn) && (((Pawn)p[srcrow][srccol-1]).enpassant==true)){
 			epc=srccol-1;
 		}
 			
-		if(p[srcrow][srccol+1] instanceof Pawn && ((Pawn)p[srcrow][srccol+1]).enpassant){
+		if((srccol<7) && (p[srcrow][srccol+1] instanceof Pawn) && (((Pawn)p[srcrow][srccol+1]).enpassant==true)){
 			epc=srccol+1;
 		}
 		
-		if((p[srcrow][srccol] instanceof Pawn) && (destrow==srcrow+1) && (destcol==epc)){
+		if((p[srcrow][srccol] instanceof Pawn) && (((destrow==srcrow+1) && p[srcrow][srccol].color=='b')||((destrow==srcrow-1) && p[srcrow][srccol].color=='w')) && (destcol==epc)){
 			nextMoveEP=true;
+			return null;
 		}
-		
-		return "Invalid Move. Try Again.\n";
+		//nextMoveEP=false;
+		return "in allowenpassant - Invalid Move. Try Again.\n";
+	//return nextMoveEP;
 	}
 	
 	public String isKingInCheck(char color){
@@ -301,7 +304,7 @@ public class Board {
         }
 		return locofCheck;
 	}
-	
+
 	public static boolean getKingBoolean(char c){
 		if(c=='w'){
 			return wKingCheck;

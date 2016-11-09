@@ -1,6 +1,6 @@
 package pieces;
 
-import java.util.ArrayList;
+
 
 import chess.Board;
 
@@ -86,6 +86,6 @@ public class King extends Piece {
 			}
 		}
 
-		return "Invalid Move. Try Again.\n";
+		return "Invalid castling Move. Try Again.\n";
 	}
 	}

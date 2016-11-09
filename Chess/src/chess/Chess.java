@@ -16,8 +16,9 @@ public class Chess {
 					String dest=srcdest.substring(3,5);
 					if(newBoard.move(src, dest)==0){
 						newBoard.turnBorW='b';
+						if(newBoard.isKingInCheck('b')!=null)
+						System.out.println(newBoard.isKingInCheck('b'));
 					}
-					System.out.println(Board.isKingInCheck('w'));
 					//System.out.println("White King: " + newBoard.checkforKing('w'));
 				}
 				else{
@@ -34,8 +35,9 @@ public class Chess {
 					String dest=srcdest.substring(3,5);
 					if(newBoard.move(src, dest)==0){
 						newBoard.turnBorW='w';
+						if(newBoard.isKingInCheck('w')!=null)
+						System.out.println(newBoard.isKingInCheck('w'));
 					}
-					System.out.println(Board.isKingInCheck('b'));
 					//System.out.println("Black King: " + newBoard.checkforKing('b'));
 				}
 				else{

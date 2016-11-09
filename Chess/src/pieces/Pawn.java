@@ -70,10 +70,15 @@ public class Pawn extends Piece{
 					}
 					return null;
 				}
-				if(newboard[destrow][destcol] instanceof BoardNull && (chess.Board.nextMoveEP==true)){  
+				if((newboard[destrow][destcol] instanceof BoardNull) && (chess.Board.allowEnpassant(newboard,srcrow, srccol,destrow, destcol)==null)){  
 					newboard[destrow][destcol]=newboard[srcrow][srccol];
 					newboard[srcrow][srccol]=new BoardNull(srcrow,srccol);
+					if(color=='b'){
 					newboard[destrow-1][destcol]=new BoardNull(destrow-1,destcol);
+					}
+					else if(color=='w'){
+						newboard[destrow+1][destcol]=new BoardNull(destrow+1,destcol);
+						}
 					chess.Board.nextMoveEP=false;
 					enpassant=false;
 					moved=true;
@@ -94,14 +99,20 @@ public class Pawn extends Piece{
 			}
 			else if(moved==false && ((srcrow-2==destrow && srccol==destcol) || (srcrow+2==destrow && srccol==destcol))){  
 				
-				if((!(newboard[destrow][destcol-1] instanceof Pawn) ) && //just added
-						(newboard[destrow][destcol-1].color!=color) ){
+				if((destcol>0) && (!(newboard[destrow][destcol-1] instanceof BoardNull) ) && //just added
+						(newboard[destrow][destcol-1].color!=color) &&
+						(newboard[destrow][destcol-1].ID.contains("p"))
+						){
 					enpassant=true;
+					//return "piece in enpassant";
 				}
 				
-				if((!(newboard[destrow][destcol+1] instanceof Pawn) ) && 
-						(newboard[destrow][destcol+1].color!=color) ){
+				if((destcol<7) && (!(newboard[destrow][destcol+1] instanceof BoardNull) ) && 
+						(newboard[destrow][destcol+1].color!=color) &&
+						(newboard[destrow][destcol+1].ID.contains("p"))
+						){
 					enpassant=true;
+					//return "piece in enpassant";
 				}
 //just added end				
 				if(color=='w'){

@@ -14,7 +14,7 @@ public class Rook extends Piece {
 		boolean isEmpty=true;
 	   
 		if((srcrow==destrow) || (srccol==destcol)){
-			if(r<destrow && c==destcol){ //up
+			if(r<destrow && c==destcol){ //down
 				r=r+1;
 				for(;r<destrow; r++){
 					if(!(newboard[r][c] instanceof BoardNull)){ // not empty at spot
@@ -24,7 +24,7 @@ public class Rook extends Piece {
 				} 
 			} 
 
-			if(r>destrow && c==destcol){ //down
+			if(r>destrow && c==destcol){ //up
 				r=r-1;
 				for(;r>destrow; r--){
 					if(!(newboard[r][c] instanceof BoardNull)){ // not empty at spot
