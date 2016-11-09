@@ -16,10 +16,11 @@ public class Board {
 	boolean checkmate=false;
 	boolean stalemate=false;
 	public static boolean castling=false;
+	public static char promotion;
+	public static boolean nextMoveEP=false;
 	char turnBorW='w';
 	public static int[] bKing={0,4};
 	public static int[] wKing={7,3};
-	public static char promotion;
 
 	public Board(){
 		for(int i=0;i<=8;i++){
@@ -115,7 +116,16 @@ public class Board {
 				//System.out.println(source.ID);
 				//Piece destination=newboard[destrow][destcol];
 				//System.out.println(destination.ID);
-				String s=source.move(newboard, srcrow, srccol, destrow, destcol);
+				String s="";
+				if(Board.nextMoveEP==true && Board.allowEnpassant(newboard, srcrow, srccol, destrow, destcol)!=null){
+					s="Enpassant Not Allowed";
+				}
+				else if(Board.nextMoveEP==true && Board.allowEnpassant(newboard, srcrow, srccol, destrow, destcol)==null){
+					s=source.move(newboard, srcrow, srccol, destrow, destcol);
+				}
+				else if (Board.nextMoveEP==false){
+					s=source.move(newboard, srcrow, srccol, destrow, destcol);
+				}
 			
 				if(s==null){
 					success=0;
@@ -146,6 +156,24 @@ public class Board {
 		return success;
 	}
 	
+	
+	public static String allowEnpassant(Piece[][] p, int srcrow, int srccol, int destrow, int destcol){
+		int epc=0;
+		
+		if(p[srcrow][srccol-1] instanceof Pawn && ((Pawn)p[srcrow][srccol-1]).enpassant){
+			epc=srccol-1;
+		}
+			
+		if(p[srcrow][srccol+1] instanceof Pawn && ((Pawn)p[srcrow][srccol+1]).enpassant){
+			epc=srccol+1;
+		}
+		
+		if((p[srcrow][srccol] instanceof Pawn) && (destrow==srcrow+1) && (destcol==epc)){
+			nextMoveEP=true;
+		}
+		
+		return "Invalid Move. Try Again.\n";
+	}
 	
 	public static String isKingInCheck(char color){
 		ArrayList<Piece> result;

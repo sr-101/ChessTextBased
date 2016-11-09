@@ -91,7 +91,7 @@ public class Bishop extends Piece {
 	} 
 
 	else if(v!=h){
-		return "V not equal to H \n";
+		return "Invalid Move. Try Again.\n";
 	}
 	
 	

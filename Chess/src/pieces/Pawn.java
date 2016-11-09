@@ -1,17 +1,13 @@
 package pieces;
 
 public class Pawn extends Piece{
-	
-	public Pawn(char color){
-		this.color=color;
-		this.ID=" "+color+"p"+" ";
+	public boolean enpassant=false;
+	public Pawn(char BW){
+		this.color=BW;
+		this.ID=" "+BW+"p"+" ";
 	}
 	
-	//public void enPassant(Piece[][] newboard, int destrow, int destcol, int epr, int epc){
-		
-		
-	//	if
-	//}
+	
 	
 	public String pawnPromotion(Piece[][] newboard, int destrow, int destcol){
 		char pro=chess.Board.promotion;
@@ -57,34 +53,57 @@ public class Pawn extends Piece{
 			return null;
 			}
 		}
-		 return "Error - invalid promotion";
+		 return "Error - invalid promotion\n";
 		
 	}
 	
 	
 	public String move(Piece[][] newboard, int srcrow, int srccol, int destrow, int destcol){
-	//	if(chess.Board.enPassant==false){
+	
 			if((color=='w' && srcrow-1==destrow)||(color=='b' && srcrow+1==destrow)){
 				if(newboard[destrow][destcol] instanceof BoardNull && (srccol==destcol)){  
 					newboard[destrow][destcol]=newboard[srcrow][srccol];
 					newboard[srcrow][srccol]=new BoardNull(srcrow,srccol);
 					moved=true;
-					if(destrow==8 || destrow==0){
+					if(destrow==7 || destrow==0){
 						pawnPromotion(newboard,destrow,destcol);
 					}
 					return null;
 				}
-				else if(!(newboard[destrow][destcol] instanceof BoardNull) && (srccol+1==destcol||srccol-1==destcol)){  
+				if(newboard[destrow][destcol] instanceof BoardNull && (chess.Board.nextMoveEP==true)){  
+					newboard[destrow][destcol]=newboard[srcrow][srccol];
+					newboard[srcrow][srccol]=new BoardNull(srcrow,srccol);
+					newboard[destrow-1][destcol]=new BoardNull(destrow-1,destcol);
+					chess.Board.nextMoveEP=false;
+					enpassant=false;
+					moved=true;
+					if(destrow==7 || destrow==0){
+						pawnPromotion(newboard,destrow,destcol);
+					}
+					return null;
+				}
+				else if(!(newboard[destrow][destcol] instanceof BoardNull) && (srccol+1==destcol||srccol-1==destcol)){  //kill
 					newboard[destrow][destcol]=newboard[srcrow][srccol];
 					newboard[srcrow][srccol]=new BoardNull(srcrow,srccol);
 					moved=true;
-					if(destrow==8 || destrow==0){
+					if(destrow==7 || destrow==0){
 						pawnPromotion(newboard,destrow,destcol);
 					}
 					return null;
 				}
 			}
 			else if(moved==false && ((srcrow-2==destrow && srccol==destcol) || (srcrow+2==destrow && srccol==destcol))){  
+				
+				if((!(newboard[destrow][destcol-1] instanceof Pawn) ) && //just added
+						(newboard[destrow][destcol-1].color!=color) ){
+					enpassant=true;
+				}
+				
+				if((!(newboard[destrow][destcol+1] instanceof Pawn) ) && 
+						(newboard[destrow][destcol+1].color!=color) ){
+					enpassant=true;
+				}
+//just added end				
 				if(color=='w'){
 					if(newboard[destrow][destcol] instanceof BoardNull && newboard[destrow+1][destcol] instanceof BoardNull){
 						newboard[destrow][destcol]=newboard[srcrow][srccol];
