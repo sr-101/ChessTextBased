@@ -35,15 +35,23 @@ public class Board {
 				}
 				else if(j!=8 && i!=8 && i>=2 && i<=5 && (j+i)%2!=0){
 					newboard[i][j]=new BoardNull(i,j);
+					newboard[i][j].location[0]=i;
+					newboard[i][j].location[1]=j;
 				}
 				else if(i==1 && j<8){
 					newboard[i][j]=new Pawn('b');
+					newboard[i][j].location[0]=i;
+					newboard[i][j].location[1]=j;
 				}
 				else if(i==6 && j<8){
 					newboard[i][j]=new Pawn('w');
+					newboard[i][j].location[0]=i;
+					newboard[i][j].location[1]=j;
 				}
 				else{
 					newboard[i][j]=new BoardNull(i,j);
+					newboard[i][j].location[0]=i;
+					newboard[i][j].location[1]=j;
 				}
 			}
 		}
@@ -52,20 +60,30 @@ public class Board {
 			case 0:
 			case 7:
 				newboard[0][j]=new Rook('b');
+				newboard[0][j].location[0]=0;
+				newboard[0][j].location[1]=j;
 				break;
 			case 1:
 			case 6:
 				newboard[0][j]=new Knight('b');
+				newboard[0][j].location[0]=0;
+				newboard[0][j].location[1]=j;
 				break;
 			case 2:
 			case 5:
 				newboard[0][j]=new Bishop('b');
+				newboard[0][j].location[0]=0;
+				newboard[0][j].location[1]=j;
 				break;
 			case 3:
 				newboard[0][j]=new Queen('b');
+				newboard[0][j].location[0]=0;
+				newboard[0][j].location[1]=j;
 				break;
 			case 4:
 				newboard[0][j]=new King('b');
+				newboard[0][j].location[0]=0;
+				newboard[0][j].location[1]=j;
 				break;
 			}
 		}
@@ -74,20 +92,30 @@ public class Board {
 			case 0:
 			case 7:
 				newboard[7][j]=new Rook('w');
+				newboard[7][j].location[0]=7;
+				newboard[7][j].location[1]=j;
 				break;
 			case 1:
 			case 6:
 				newboard[7][j]=new Knight('w');
+				newboard[7][j].location[0]=7;
+				newboard[7][j].location[1]=j;
 				break;
 			case 2:
 			case 5:
 				newboard[7][j]=new Bishop('w');
+				newboard[7][j].location[0]=7;
+				newboard[7][j].location[1]=j;
 				break;
 			case 4:
 				newboard[7][j]=new King('w');
+				newboard[7][j].location[0]=7;
+				newboard[7][j].location[1]=j;
 				break;
 			case 3:
 				newboard[7][j]=new Queen('w');
+				newboard[7][j].location[0]=7;
+				newboard[7][j].location[1]=j;
 				break;
 			}
 		}
@@ -115,79 +143,58 @@ public class Board {
 		if((srcrow>=0 && srcrow<=7) && (destrow>=0 && destrow<=7) && (srccol>=0 && srccol<=7) && (destcol>=0 && destcol<=7)){
 			Piece source=newboard[srcrow][srccol];
 			if(source.color==turnBorW && source.color!='X'){
+				source.location[0]=srcrow;
+				source.location[1]=srccol;
 				//System.out.println(source.ID);
 				//Piece destination=newboard[destrow][destcol];
 				//System.out.println(destination.ID);
 				String s="";
 
-				if(isKingInCheck('w') != null || isKingInCheck('b')!=null){
-					if(isKingInCheck('w') != null){
-						Piece temp=newboard[destrow][destcol];
-						Piece temp2=newboard[srcrow][srccol];
-						s=source.move(newboard, srcrow, srccol, destrow, destcol);
-						if(s==null){
-							if(isKingInCheck('w') != null){
-								newboard[srcrow][srccol]=temp2;
-								newboard[destrow][destcol]=temp;
-								success=-1;
-								printBoard();
-								System.out.println("Still in check. Try Again.");
-							}
-							else{
-								success=0;
-								printBoard();
-							}
-						}
-					}
-					else if(isKingInCheck('b')!=null){
-						Piece temp=newboard[destrow][destcol];
-						Piece temp2=newboard[srcrow][srccol];
-						s=source.move(newboard, srcrow, srccol, destrow, destcol);
-						if(s==null){
-							if(isKingInCheck('b') != null){
-								newboard[srcrow][srccol]=temp2;
-								newboard[destrow][destcol]=temp;
-								success=-1;
-								printBoard();
-								System.out.println("Still in check. Try Again.");
-							}
-							else{
-								success=0;
-								printBoard();
-							}
-						}
-					}
-				}
-				else{
-				if(Board.nextMoveEP==true && Board.allowEnpassant(newboard, srcrow, srccol, destrow, destcol)!=null){
-					s="Enpassant Not Allowed";
-				}
-				else if(Board.nextMoveEP==true && Board.allowEnpassant(newboard, srcrow, srccol, destrow, destcol)==null){
-					s=source.move(newboard, srcrow, srccol, destrow, destcol);
-				}
-				else if (Board.nextMoveEP==false){
-					s=source.move(newboard, srcrow, srccol, destrow, destcol);
-				}
-			
+				//System.out.println("\nWhite is in check!");
+				Piece temp=newboard[destrow][destcol];
+				Piece temp2=newboard[srcrow][srccol];
+				s=source.move(newboard, srcrow, srccol, destrow, destcol);
+				//System.out.println("S: "+s);
 				if(s==null){
-					success=0;
-					printBoard();
+					if(turnBorW=='w' && isKingInCheck('w') != null){
+						newboard[srcrow][srccol]=temp2;
+						newboard[destrow][destcol]=temp;
+						success=-1;
+						printBoard();
+						System.out.println("In check. Try Again.\n");
+						return success;
+					}
+					else if(turnBorW=='b' && isKingInCheck('b') != null){
+						newboard[srcrow][srccol]=temp2;
+						newboard[destrow][destcol]=temp;
+						success=-1;
+						printBoard();
+						System.out.println("In check. Try Again.\n");
+						return success;
+					}
+					else{
+						success=0;
+						printBoard();
+						return success;
+					}
 				}
 				else{
 					success=-1;
 					printBoard();
 					System.out.println(s);
+					return success;
 				}
 			}
-				}
 			else{
 				success=-2;
 				printBoard();
 				if(source.color=='X'){
 					System.out.println("You selected an empty space. Try again.\n");
+					return success;
 				}
 				else{
 					System.out.println("You selected the opponent's piece. Try again.\n");
+					return success;
 				}
 			}
 		}
@@ -195,8 +202,8 @@ public class Board {
 			success=-3;
 			printBoard();
 			System.out.println("Selection is off the board. Try again.");
+			return success;
 		}
-		return success;
 	}
 	
 	
@@ -256,52 +263,175 @@ public class Board {
 		int e=1;
 		int srcrow=kingloc[0];
 		int srccol=kingloc[1];
-		King king=(King) newboard[kingloc[0]][kingloc[1]];
+		Piece king=newboard[kingloc[0]][kingloc[1]];
 		
         //isInCheck by Bishop or Queen?
 		for(int r=srcrow+1; r<8; r++){ 
 			int c=srccol;
         	if(c+d<=7){
-        		System.out.println(newboard[r][c+d].ID);
-        		if((!(newboard[r][c+d] instanceof BoardNull)) && (newboard[r][c+d].color!=king.color) && ((newboard[r][c+d].ID.contains("B") || (newboard[r][c+d].ID.contains("Q"))))){ //there is nothing between a bishop of another color and the king
+        		//System.out.println("Bottom Right: "+newboard[r][c+d]);
+        		if((!(newboard[r][c+d] instanceof BoardNull)) && (newboard[r][c+d].color!=king.color) && ((king.color=='b' && newboard[r][c+d].ID.contains("p") && d==1 && r==srcrow+1) || (newboard[r][c+d].ID.contains("B") || (newboard[r][c+d].ID.contains("Q"))))){ //there is nothing between a bishop of another color and the king
+        			if(newboard[r][c+d].ID.contains("p"))
+        			newboard[r][c+d].location[0]=r;
+        			newboard[r][c+d].location[1]=c+d;
         			locofCheck.add(newboard[r][c+d]);
+        		}
+        		else if((!(newboard[r][c+d] instanceof BoardNull)) && (newboard[r][c+d].color==king.color)){
+        			break;
         		}
         		d++;
         	}
+		}
+		for(int r=srcrow+1; r<8; r++){ 
+			int c=srccol;
         	if(c-e>=0){
-        		System.out.println(newboard[r][c-e].ID);
-        		if((!(newboard[r][c-e] instanceof BoardNull)) && (newboard[r][c-e].color!=king.color) && ((newboard[r][c-e].ID.contains("B") || (newboard[r][c-e].ID.contains("Q"))))){ //there is nothing between a bishop of another color and the king
+        		//System.out.println("Bottom Left: "+newboard[r][c-e]);
+        		if((!(newboard[r][c-e] instanceof BoardNull)) && (newboard[r][c-e].color!=king.color) && ((king.color=='b' && newboard[r][c-e].ID.contains("p") && e==1 && r==srcrow+1) || (newboard[r][c-e].ID.contains("B") || (newboard[r][c-e].ID.contains("Q"))))){ //there is nothing between a bishop of another color and the king
+        			newboard[r][c-e].location[0]=r;
+        			newboard[r][c-e].location[1]=c-e;
         			locofCheck.add(newboard[r][c-e]);
+        		}
+        		else if((!(newboard[r][c-e] instanceof BoardNull)) && (newboard[r][c-e].color==king.color)){
+        			break;
         		}
         		e++;
         	}
-        	if(c-e==0 && c+d==7){
-        		d=1;
-        		e=1;
+        }
+		d=1;
+		for(int r=srcrow-1; r>=0; r--){ 
+			int c=srccol;
+			if(c+d<=7){
+        		//System.out.println("Top Right: "+newboard[r][c+d]);
+        		if((!(newboard[r][c+d] instanceof BoardNull)) && (newboard[r][c+d].color!=king.color) && ((king.color=='w' && newboard[r][c+d].ID.contains("p") && d==1 && r==srcrow-1) || (newboard[r][c+d].ID.contains("B") || (newboard[r][c+d].ID.contains("Q"))))){ //there is nothing between a bishop of another color and the king
+        			newboard[r][c+d].location[0]=r;
+        			newboard[r][c+d].location[1]=c+d;
+        			locofCheck.add(newboard[r][c+d]);
+        		}
+        		else if((!(newboard[r][c+d] instanceof BoardNull)) && (newboard[r][c+d].color==king.color)){
+        			break;
+        		}
+        		d++;
+        	}
+		}
+		e=1;
+		for(int r=srcrow-1; r>=0; r--){ 
+			int c=srccol;
+        	if(c-e>=0){
+        		//System.out.println("Top Left: "+newboard[r][c-e]);
+        		if((!(newboard[r][c-e] instanceof BoardNull)) && (newboard[r][c-e].color!=king.color) && ((king.color=='w' && newboard[r][c-e].ID.contains("p") && e==1 && r==srcrow-1) || (newboard[r][c-e].ID.contains("B") || (newboard[r][c-e].ID.contains("Q"))))){ //there is nothing between a bishop of another color and the king
+        			newboard[r][c-e].location[0]=r;
+        			newboard[r][c-e].location[1]=c-e;
+        			locofCheck.add(newboard[r][c-e]);
+        		}
+        		else if((!(newboard[r][c-e] instanceof BoardNull)) && (newboard[r][c-e].color==king.color)){
+        			break;
+        		}
+        		e++;
         	}
         }
 		
+		for(int c=srccol+1; c<8; c++){ 
+			int r=srcrow;
+    		System.out.println("Right: "+newboard[r][c]);
+    		if((!(newboard[r][c] instanceof BoardNull)) && (newboard[r][c].color!=king.color) && ((newboard[r][c].ID.contains("R") || (newboard[r][c].ID.contains("Q"))))){ //there is nothing between a rook or queen of another color and the king
+    			newboard[r][c].location[0]=r;
+    			newboard[r][c].location[1]=c;
+    			locofCheck.add(newboard[r][c]);
+    		}
+    		else if(((!(newboard[r][c] instanceof BoardNull)) && (newboard[r][c].color==king.color))||(((newboard[r][c] instanceof Pawn)) && (newboard[r][c].color!=king.color))){
+    			break;
+    		}        	
+		}
+		
+		for(int c=srccol-1; c>=0; c--){ 
+			int r=srcrow;
+    		System.out.println("Left: "+newboard[r][c]);
+    		if((!(newboard[r][c] instanceof BoardNull)) && (newboard[r][c].color!=king.color) && ((newboard[r][c].ID.contains("R") || (newboard[r][c].ID.contains("Q"))))){ //there is nothing between a rook or queen of another color and the king
+    			newboard[r][c].location[0]=r;
+    			newboard[r][c].location[1]=c;
+    			locofCheck.add(newboard[r][c]);
+    		}
+    		else if(((!(newboard[r][c] instanceof BoardNull)) && (newboard[r][c].color==king.color))||(((newboard[r][c] instanceof Pawn)) && (newboard[r][c].color!=king.color))){
+    			break;
+    		}        	
+		}
+		
+		for(int r=srcrow+1; r<8; r++){ 
+			int c=srccol;
+    		System.out.println("Down: "+newboard[r][c]);
+    		if((!(newboard[r][c] instanceof BoardNull)) && (newboard[r][c].color!=king.color) && ((newboard[r][c].ID.contains("R") || (newboard[r][c].ID.contains("Q"))))){ //there is nothing between a rook or queen of another color and the king
+    			newboard[r][c].location[0]=r;
+    			newboard[r][c].location[1]=c;
+    			locofCheck.add(newboard[r][c]);
+    		}
+    		else if(((!(newboard[r][c] instanceof BoardNull)) && (newboard[r][c].color==king.color))||(((newboard[r][c] instanceof Pawn)) && (newboard[r][c].color!=king.color))){
+    			break;
+    		}        	
+		}
+		
 		for(int r=srcrow-1; r>=0; r--){ 
 			int c=srccol;
-        	if(c+d<=7){
-        		System.out.println(newboard[r][c+d].ID);
-        		if((!(newboard[r][c+d] instanceof BoardNull)) && (newboard[r][c+d].color!=king.color) && ((newboard[r][c+d].ID.contains("B") || (newboard[r][c+d].ID.contains("Q"))))){ //there is nothing between a bishop of another color and the king
-        			locofCheck.add(newboard[r][c+d]);
-        		}
-        		d++;
-        	}
-        	if(c-e>=0){
-        		System.out.println(newboard[r][c-e].ID);
-        		if((!(newboard[r][c-e] instanceof BoardNull)) && (newboard[r][c-e].color!=king.color) && ((newboard[r][c-e].ID.contains("B") || (newboard[r][c-e].ID.contains("Q"))))){ //there is nothing between a bishop of another color and the king
-        			locofCheck.add(newboard[r][c-e]);
-        		}
-        		e++;
-        	}
-        	if(c-e==0 && c+d==7){
-        		d=1;
-        		e=1;
-        	}
-        }
+    		System.out.println("Up: "+newboard[r][c]);
+    		if((!(newboard[r][c] instanceof BoardNull)) && (newboard[r][c].color!=king.color) && ((newboard[r][c].ID.contains("R") || (newboard[r][c].ID.contains("Q"))))){ //there is nothing between a rook or queen of another color and the king
+    			newboard[r][c].location[0]=r;
+    			newboard[r][c].location[1]=c;
+    			locofCheck.add(newboard[r][c]);
+    		}
+    		else if(((!(newboard[r][c] instanceof BoardNull)) && (newboard[r][c].color==king.color))||(((newboard[r][c] instanceof Pawn)) && (newboard[r][c].color!=king.color))){
+    			break;
+    		}        	
+		}
+		
+		int r=srcrow; int c=srccol;
+		if(r+2<=7 && c-1>=0) System.out.println("Down Left: "+newboard[r+2][c-1]);
+		if((r+2<=7 && c-1>=0) && (!(newboard[r+2][c-1] instanceof BoardNull)) && (newboard[r+2][c-1].color!=king.color) && (newboard[r+2][c-1].ID.contains("N"))){ //there is a knight there
+			newboard[r+2][c-1].location[0]=r+2;
+			newboard[r+2][c-1].location[1]=c-1;
+			locofCheck.add(newboard[r+2][c-1]);
+		}		
+		if(r+2<=7 && c+1<=7) System.out.println("Down Right: "+newboard[r+2][c+1]);
+		if((r+2<=7 && c+1<=7) && (!(newboard[r+2][c+1] instanceof BoardNull)) && (newboard[r+2][c+1].color!=king.color) && (newboard[r+2][c+1].ID.contains("N"))){ //there is a knight there
+			newboard[r+2][c+1].location[0]=r+2;
+			newboard[r+2][c+1].location[1]=c+1;
+			locofCheck.add(newboard[r+2][c+1]);
+		}
+		if(r-2>=0 && c-1>=0) System.out.println("Up Left: "+newboard[r-2][c-1]);
+		if((r-2>=0 && c-1>=0) && (!(newboard[r-2][c-1] instanceof BoardNull)) && (newboard[r-2][c-1].color!=king.color) && (newboard[r-2][c-1].ID.contains("N"))){ //there is a knight there
+			newboard[r-2][c-1].location[0]=r-2;
+			newboard[r-2][c-1].location[1]=c-1;
+			locofCheck.add(newboard[r-2][c-1]);
+		}		
+		if(r-2>=0 && c+1<=7) System.out.println("Up Right: "+newboard[r-2][c+1]);
+		if((r-2>=0 && c+1<=7) && (!(newboard[r-2][c+1] instanceof BoardNull)) && (newboard[r-2][c+1].color!=king.color) && (newboard[r-2][c+1].ID.contains("N"))){ //there is a knight there
+			newboard[r-2][c+1].location[0]=r-2;
+			newboard[r-2][c+1].location[1]=c+1;
+			locofCheck.add(newboard[r-2][c+1]);
+		}
+		if(r+1<=7 && c-2>=0) System.out.println("Left Down: "+newboard[r+1][c-2]);
+		if((r+1<=7 && c-2>=0) && (!(newboard[r+1][c-2] instanceof BoardNull)) && (newboard[r+1][c-2].color!=king.color) && (newboard[r+1][c-2].ID.contains("N"))){ //there is a knight there
+			newboard[r+1][c-2].location[0]=r+1;
+			newboard[r+1][c-2].location[1]=c-2;
+			locofCheck.add(newboard[r+1][c-2]);
+		}		
+		if(r+1<=7 && c+2<=7) System.out.println("Right Down: "+newboard[r+1][c+2]);
+		if((r+1<=7 && c+2<=7) && (!(newboard[r+1][c+2] instanceof BoardNull)) && (newboard[r+1][c+2].color!=king.color) && (newboard[r+1][c+2].ID.contains("N"))){ //there is a knight there
+			newboard[r+1][c+2].location[0]=r+1;
+			newboard[r+1][c+2].location[1]=c+2;
+			locofCheck.add(newboard[r+1][c+2]);
+		}
+		if(r-1>=0 && c-2>=0) System.out.println("Left Up: "+newboard[r-1][c-2]);
+		if((r-1>=0 && c-2>=0) && (!(newboard[r-1][c-2] instanceof BoardNull)) && (newboard[r-1][c-2].color!=king.color) && (newboard[r-1][c-2].ID.contains("N"))){ //there is a knight there
+			newboard[r-1][c-2].location[0]=r-1;
+			newboard[r-1][c-2].location[1]=c-2;
+			locofCheck.add(newboard[r-1][c-2]);
+		}		
+		if(r-1>=0 && c+2<=7) System.out.println("Right Up: "+newboard[r-1][c+2]);
+		if((r-1>=0 && c+2<=7) && (!(newboard[r-1][c+2] instanceof BoardNull)) && (newboard[r-1][c+2].color!=king.color) && (newboard[r-1][c+2].ID.contains("N"))){ //there is a knight there
+			newboard[r-1][c+2].location[0]=r-1;
+			newboard[r-1][c+2].location[1]=c+2;
+			locofCheck.add(newboard[r-1][c+2]);
+		}
+				
 		return locofCheck;
 	}
 

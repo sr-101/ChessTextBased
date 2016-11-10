@@ -19,7 +19,9 @@ public class King extends Piece {
 	public String move(Piece[][] newboard, int srcrow, int srccol, int destrow, int destcol){ //is empty space, so move up, down, left or right one space?
 		if(
 			(srcrow-1==destrow && srccol==destcol) || (srcrow+1==destrow && srccol==destcol) ||
-			(srcrow==destrow && srccol-1==destcol) || (srcrow==destrow && srccol+1==destcol) )
+			(srcrow==destrow && srccol-1==destcol) || (srcrow==destrow && srccol+1==destcol) ||
+			(srcrow-1==destrow && srccol-1==destcol) || (srcrow-1==destrow && srccol+1==destcol) ||
+			(srcrow+1==destrow && srccol-1==destcol) || (srcrow+1==destrow && srccol+1==destcol))
 		{
 			if(!(newboard[destrow][destcol] instanceof BoardNull)){ //actual destination is not empty
 				if((newboard[destrow][destcol]).color==color){ //piece in destination is same color as piece of player
@@ -63,29 +65,29 @@ public class King extends Piece {
 				(Board.getKingBoolean(color)) && //king is not in check
 				(Board.getKingBoolean(newboard[destrow][destcol].color)) //destination is not in check
 				) 
-			{
-				int c=srccol;
-				for(;c<destcol; c++){
-					if((!(newboard[srcrow][c] instanceof BoardNull)) || !(Board.getKingBoolean(newboard[srcrow][c].color))){ //there is a piece b/w king and rook or king will pass through a space that is in check
-						return "Invalid Move. Try Again.\n";
+				{
+					int c=srccol;
+					for(;c<destcol; c++){
+						if((!(newboard[srcrow][c] instanceof BoardNull)) || !(Board.getKingBoolean(newboard[srcrow][c].color))){ //there is a piece b/w king and rook or king will pass through a space that is in check
+							return "Invalid Move. Try Again.\n";
+						}
 					}
+					newboard[destrow][destcol]=newboard[srcrow][srccol];
+					Piece temp=newboard[destrow][destcol];
+					newboard[srcrow][srccol]=temp;
+					
+					if(color=='b'){
+						Board.bKing[0]=destrow;
+						Board.bKing[1]=destcol;
+					}
+					else if(color=='w'){
+						Board.wKing[0]=destrow;
+						Board.wKing[1]=destcol;
+					}
+					return null;
 				}
-				newboard[destrow][destcol]=newboard[srcrow][srccol];
-				Piece temp=newboard[destrow][destcol];
-				newboard[srcrow][srccol]=temp;
-				
-				if(color=='b'){
-					Board.bKing[0]=destrow;
-					Board.bKing[1]=destcol;
-				}
-				else if(color=='w'){
-					Board.wKing[0]=destrow;
-					Board.wKing[1]=destcol;
-				}
-			return null;
+				return "Invalid castling Move. Try Again.\n";
 			}
+		return null;
 		}
-
-		return "Invalid castling Move. Try Again.\n";
-	}
 	}

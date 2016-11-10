@@ -12,9 +12,13 @@ public class BoardNull extends Piece{
 		}
 		else if(j!=8 && i!=8 && (j+i)%2!=0){
 			this.ID=(" ## ");
+			this.location[0]=i;
+			this.location[1]=j;
 		}
 		else{
 			this.ID=("    ");
+			this.location[0]=i;
+			this.location[1]=j;
 		}
 	}
 	
