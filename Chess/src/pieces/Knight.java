@@ -1,6 +1,10 @@
 package pieces;
 
+import java.util.LinkedHashSet;
+import java.util.Set;
+
 public class Knight extends Piece {
+	Set<Move> moves=new LinkedHashSet<Move>();
 
 	public Knight(char BW){
 		this.color=BW;
@@ -33,6 +37,62 @@ public class Knight extends Piece {
 		
 
 		return "Invalid Move. Try Again.\n";
+	}
+
+	@Override
+	public Set<Move> getAllMoves(Piece[][] newboard) {
+		int srcrow=location[0];
+		int srccol=location[1];
+		int r=srcrow; int c=srccol;
+		if(r+2<=7 && c-1>=0){
+			//System.out.println("Down Left: "+newboard[r+2][c-1]);
+			if((!(newboard[r+2][c-1] instanceof BoardNull) && (newboard[r+2][c-1].color!=color))||(newboard[r+2][c-1] instanceof BoardNull)){ //there is a knight there
+				moves.add(new Move(location, ID, r+2,c-1));
+			}
+		}
+		if(r+2<=7 && c+1<=7){
+			//System.out.println("Down Right: "+newboard[r+2][c+1]);
+			if((!(newboard[r+2][c+1] instanceof BoardNull) && (newboard[r+2][c+1].color!=color))||(newboard[r+2][c+1] instanceof BoardNull)){ //there is a knight there
+				moves.add(new Move(location, ID, r+2,c+1));
+			}
+		}
+		if(r-2>=0 && c-1>=0){
+			//System.out.println("Up Left: "+newboard[r-2][c-1]);
+			if((!(newboard[r-2][c-1] instanceof BoardNull) && (newboard[r-2][c-1].color!=color))||(newboard[r-2][c-1] instanceof BoardNull)){ //there is a knight there
+				moves.add(new Move(location, ID, r-2,c-1));
+			}		
+		}
+		if(r-2>=0 && c+1<=7){
+			//System.out.println("Up Right: "+newboard[r-2][c+1]);
+			if((!(newboard[r-2][c+1] instanceof BoardNull) && (newboard[r-2][c+1].color!=color))||(newboard[r-2][c+1] instanceof BoardNull)){ //there is a knight there
+				moves.add(new Move(location, ID, r-2,c+1));
+			}
+		}
+		if(r+1<=7 && c-2>=0){
+			//System.out.println("Left Down: "+newboard[r+1][c-2]);
+			if((!(newboard[r+1][c-2] instanceof BoardNull) && (newboard[r+1][c-2].color!=color))||(newboard[r+1][c-2] instanceof BoardNull)){ //there is a knight there
+				moves.add(new Move(location, ID, r+1,c-2));
+			}
+		}
+		if(r+1<=7 && c+2<=7){ 
+			//System.out.println("Right Down: "+newboard[r+1][c+2]);
+			if((!(newboard[r+1][c+2] instanceof BoardNull) && (newboard[r+1][c+2].color!=color))||(newboard[r+1][c+2] instanceof BoardNull)){ //there is a knight there
+				moves.add(new Move(location, ID, r+1,c+2));
+			}
+		}
+		if(r-1>=0 && c-2>=0){
+			//System.out.println("Left Up: "+newboard[r-1][c-2]);
+			if((!(newboard[r-1][c-2] instanceof BoardNull) && (newboard[r-1][c-2].color!=color))||(newboard[r-1][c-2] instanceof BoardNull)){ //there is a knight there
+				moves.add(new Move(location, ID, r-1,c-2));
+			}	
+		}
+		if(r-1>=0 && c+2<=7){
+			//System.out.println("Right Up: "+newboard[r-1][c+2]);
+			if((!(newboard[r-1][c+2] instanceof BoardNull) && (newboard[r-1][c+2].color!=color))||(newboard[r-1][c+2] instanceof BoardNull)){ //there is a knight there
+				moves.add(new Move(location, ID, r-1,c+2));
+			}
+		}
+		return moves;
 	}
 }
 

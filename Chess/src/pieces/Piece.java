@@ -1,5 +1,7 @@
 package pieces;
 
+import java.util.Set;
+
 public abstract class Piece {
 	public char color;
 	public String ID;
@@ -13,4 +15,6 @@ public abstract class Piece {
 	public String toString() {
 		return "Piece: "+ID+" at Row: "+location[0]+", Column: "+location[1];
 	}
+	
+	public abstract Set<Move> getAllMoves(Piece[][] newboard);
 }

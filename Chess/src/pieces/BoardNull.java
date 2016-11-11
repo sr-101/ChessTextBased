@@ -1,5 +1,8 @@
 package pieces;
 
+import java.util.ArrayList;
+import java.util.Set;
+
 public class BoardNull extends Piece{
 
 	public BoardNull(int i,int j){
@@ -24,6 +27,11 @@ public class BoardNull extends Piece{
 	
 	public String move(Piece[][] newboard, int srcrow, int srccol, int destrow, int destcol) {
 		return "Error. Choose a spot with a piece.\n";
+	}
+
+	@Override
+	public Set<Move> getAllMoves(Piece[][] newboard) {
+		return null;
 	}
 
 }

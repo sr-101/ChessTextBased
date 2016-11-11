@@ -6,7 +6,7 @@ public class Chess {
 
 	public static void main(String[] args) throws IOException {
 		Board newBoard=new Board();
-		while(newBoard.checkmate==false){
+		while(Board.checkmate==false){
 			if(newBoard.turnBorW=='w'){
 				System.out.println("White's Move: ");
 				BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -46,5 +46,6 @@ public class Chess {
 				}
 			}
 		}
+		newBoard.printBoard();
 	}
 }

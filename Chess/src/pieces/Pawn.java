@@ -1,13 +1,16 @@
 package pieces;
 
+import java.util.LinkedHashSet;
+import java.util.Set;
+
 public class Pawn extends Piece{
 	public boolean enpassant=false;
+	Set<Move> moves=new LinkedHashSet<Move>();
+	
 	public Pawn(char BW){
 		this.color=BW;
 		this.ID=" "+BW+"p"+" ";
 	}
-	
-	
 	
 	public String pawnPromotion(Piece[][] newboard, int destrow, int destcol){
 		char pro=chess.Board.promotion;
@@ -114,7 +117,7 @@ public class Pawn extends Piece{
 					enpassant=true;
 					//return "piece in enpassant";
 				}
-//just added end				
+				//just added end				
 				if(color=='w'){
 					if(newboard[destrow][destcol] instanceof BoardNull && newboard[destrow+1][destcol] instanceof BoardNull){
 						newboard[destrow][destcol]=newboard[srcrow][srccol];
@@ -135,6 +138,47 @@ public class Pawn extends Piece{
 			
 			return "Invalid Move. Try Again.\n";
 		}
+
+	@Override
+	public Set<Move> getAllMoves(Piece[][] newboard) {
+		if(color=='b'){
+			if(!(newboard[location[0]][location[1]]).moved){
+				if((newboard[location[0]+2][location[1]] instanceof BoardNull)){
+					moves.add(new Move(location, ID, location[0]+2,location[1]));
+				}
+			}
+			else if(newboard[location[0]][location[1]].moved){
+				if((newboard[location[0]+1][location[1]] instanceof BoardNull)){
+					moves.add(new Move(location, ID, location[0]+1,location[1]));
+				}
+				if(!(newboard[location[0]+1][location[1]+1] instanceof BoardNull) && (newboard[location[0]+1][location[1]+1].color!=color)){
+					moves.add(new Move(location, ID, location[0]+1,location[1]+1));
+				}
+				if(!(newboard[location[0]+1][location[1]-1] instanceof BoardNull) && (newboard[location[0]+1][location[1]-1].color!=color)){
+					moves.add(new Move(location, ID, location[0]+1,location[1]-1));
+				}
+			}
+		}
+		else if(color=='w'){
+			if(!(newboard[location[0]][location[1]]).moved){
+				if((newboard[location[0]-2][location[1]] instanceof BoardNull)){
+					moves.add(new Move(location, ID, location[0]-2,location[1]));
+				}
+			}
+			else if(newboard[location[0]][location[1]].moved){
+				if((newboard[location[0]-1][location[1]] instanceof BoardNull)){
+					moves.add(new Move(location, ID, location[0]-1,location[1]));
+				}
+				if(!(newboard[location[0]-1][location[1]+1] instanceof BoardNull) && (newboard[location[0]-1][location[1]+1].color!=color)){
+					moves.add(new Move(location, ID, location[0]-1,location[1]+1));
+				}
+				if(!(newboard[location[0]-1][location[1]-1] instanceof BoardNull) && (newboard[location[0]-1][location[1]-1].color!=color)){
+					moves.add(new Move(location, ID, location[0]-1,location[1]-1));
+				}
+			}
+		}
+		return moves;
+	}
 	
 	
 }

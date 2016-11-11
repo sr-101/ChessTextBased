@@ -1,7 +1,11 @@
 package pieces;
 
-public class Rook extends Piece {
+import java.util.LinkedHashSet;
+import java.util.Set;
 
+public class Rook extends Piece {
+	Set<Move> moves=new LinkedHashSet<Move>();
+	
 	public Rook(char BW){
 		this.color=BW;
 		this.ID=" "+BW+"R"+" ";
@@ -78,9 +82,71 @@ public class Rook extends Piece {
 		
 
 	}
-		
-		
-	  
-	
 
+	@Override
+	public Set<Move> getAllMoves(Piece[][] newboard) {
+		int srcrow=location[0];
+		int srccol=location[1];
+		
+		for(int c=srccol+1; c<8; c++){ 
+			int r=srcrow;
+    		//System.out.println("Right: "+newboard[r][c]);
+    		if(newboard[r][c] instanceof BoardNull){
+    			moves.add(new Move(location, ID, r,c));
+    		}
+    		else if((!(newboard[r][c] instanceof BoardNull)) && (newboard[r][c].color!=color)){
+    			moves.add(new Move(location, ID, r,c));
+    			break;
+    		}
+    		else if((!(newboard[r][c] instanceof BoardNull)) && (newboard[r][c].color==color)){
+    			break;
+    		}     	
+		}
+		
+		for(int c=srccol-1; c>=0; c--){ 
+			int r=srcrow;
+    		//System.out.println("Left: "+newboard[r][c]);
+    		if(newboard[r][c] instanceof BoardNull){
+    			moves.add(new Move(location, ID, r,c));
+    		}
+    		else if((!(newboard[r][c] instanceof BoardNull)) && (newboard[r][c].color!=color)){
+    			moves.add(new Move(location, ID, r,c));
+    			break;
+    		}
+    		else if((!(newboard[r][c] instanceof BoardNull)) && (newboard[r][c].color==color)){
+    			break;
+    		}     	
+		}
+		
+		for(int r=srcrow+1; r<8; r++){ 
+			int c=srccol;
+    		//System.out.println("Down: "+newboard[r][c]);
+    		if(newboard[r][c] instanceof BoardNull){
+    			moves.add(new Move(location, ID, r,c));
+    		}
+    		else if((!(newboard[r][c] instanceof BoardNull)) && (newboard[r][c].color!=color)){
+    			moves.add(new Move(location, ID, r,c));
+    			break;
+    		}
+    		else if((!(newboard[r][c] instanceof BoardNull)) && (newboard[r][c].color==color)){
+    			break;
+    		}        	
+		}
+		
+		for(int r=srcrow-1; r>=0; r--){ 
+			int c=srccol;
+    		//System.out.println("Up: "+newboard[r][c]);
+    		if(newboard[r][c] instanceof BoardNull){
+    			moves.add(new Move(location, ID, r,c));
+    		}
+    		else if((!(newboard[r][c] instanceof BoardNull)) && (newboard[r][c].color!=color)){
+    			moves.add(new Move(location, ID, r,c));
+    			break;
+    		}
+    		else if((!(newboard[r][c] instanceof BoardNull)) && (newboard[r][c].color==color)){
+    			break;
+    		}
+		}
+		return moves;
+	}
 }

@@ -1,18 +1,18 @@
 package pieces;
 
-
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 import chess.Board;
 
 public class King extends Piece {
+	Set<Move> moves=new LinkedHashSet<Move>();
 
 	public King(char color){
 		this.color=color;
 		this.ID=" "+color+"K"+" ";
 	}
-	
-	
-	
+		
 	//for checkmate - the places around the king are also in check, and the piece(s) that put the king in check are not in check
 	//and no piece of same color can come between king and piece in check
 	
@@ -90,4 +90,111 @@ public class King extends Piece {
 			}
 		return null;
 		}
+
+	@Override
+	public Set<Move> getAllMoves(Piece[][] newboard) {
+		for(int i=0;i<8;i++){
+			int[] kingloc=location;
+			int[] temploc = {0,0};
+			switch (i){
+				case 0:
+					//Up
+					if(kingloc[0]-1>=0){
+						temploc[0]=kingloc[0]-1;
+						temploc[1]=kingloc[1];
+						//System.out.println(temploc[0]+" "+temploc[1]);
+						if(newboard[temploc[0]][temploc[1]] instanceof BoardNull){
+							//System.out.println("\nUp");
+							moves.add(new Move(location, ID, temploc[0],temploc[1]));
+						}
+					}
+					break;
+				case 1:
+					//Down
+					if(kingloc[0]+1<=7){
+						temploc[0]=kingloc[0]+1;
+						temploc[1]=kingloc[1];
+						//System.out.println(temploc[0]+" "+temploc[1]);
+						if(newboard[temploc[0]][temploc[1]] instanceof BoardNull){
+							//System.out.println("\nDown");
+							moves.add(new Move(location, ID, temploc[0],temploc[1]));
+						}
+					}
+					break;
+				case 2:
+					//Left
+					if(kingloc[1]-1>=0){
+						temploc[0]=kingloc[0];
+						temploc[1]=kingloc[1]-1;
+						//System.out.println(temploc[0]+" "+temploc[1]);
+						if(newboard[temploc[0]][temploc[1]] instanceof BoardNull){
+							//System.out.println("\nLeft");
+							moves.add(new Move(location, ID, temploc[0],temploc[1]));
+						}
+					}
+					break;
+				case 3:
+					//Right
+					if(kingloc[1]+1<=7){
+						temploc[0]=kingloc[0];
+						temploc[1]=kingloc[1]+1;
+						//System.out.println(temploc[0]+" "+temploc[1]);
+						if(newboard[temploc[0]][temploc[1]] instanceof BoardNull){
+							//System.out.println("\nRight");
+							moves.add(new Move(location, ID, temploc[0],temploc[1]));
+						}
+					}
+					break;
+				case 4:
+					//Up Left
+					if(kingloc[0]-1>=0 && kingloc[1]-1>=0){
+						temploc[0]=kingloc[0]-1;
+						temploc[1]=kingloc[1]-1;
+						//System.out.println(temploc[0]+" "+temploc[1]);
+						if(newboard[temploc[0]][temploc[1]] instanceof BoardNull){
+							//System.out.println("\nUp Left");
+							moves.add(new Move(location, ID, temploc[0],temploc[1]));
+						}
+					}
+					break;
+				case 5:
+					//Up Right
+					if(kingloc[0]-1>=0 && kingloc[1]+1<=7){
+						temploc[0]=kingloc[0]-1;
+						temploc[1]=kingloc[1]+1;
+						//System.out.println(temploc[0]+" "+temploc[1]);
+						if(newboard[temploc[0]][temploc[1]] instanceof BoardNull){
+							//System.out.println("\nUp Right");
+							moves.add(new Move(location, ID, temploc[0],temploc[1]));
+						}
+					}
+					break;
+				case 6:
+					//Down Left
+					if(kingloc[0]+1<=7 && kingloc[1]-1>=0){
+						temploc[0]=kingloc[0]+1;
+						temploc[1]=kingloc[1]-1;
+						//System.out.println(temploc[0]+" "+temploc[1]);
+						if(newboard[temploc[0]][temploc[1]] instanceof BoardNull){
+							//System.out.println("\nDown Left");
+							moves.add(new Move(location, ID, temploc[0],temploc[1]));
+						}
+					}
+					break;
+				case 7:
+					//Down Right
+					if(kingloc[0]+1<=7 && kingloc[1]+1<=7){
+						temploc[0]=kingloc[0]+1;
+						temploc[1]=kingloc[1]+1;
+						//System.out.println(temploc[0]+" "+temploc[1]);
+						if(newboard[temploc[0]][temploc[1]] instanceof BoardNull){
+							//System.out.println("\nDown Right");
+							moves.add(new Move(location, ID, temploc[0],temploc[1]));
+						}
+					}
+					break;
+			}
+		}
+		return moves;
 	}
+}

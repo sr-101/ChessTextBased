@@ -1,7 +1,11 @@
 package pieces;
 
+import java.util.LinkedHashSet;
+import java.util.Set;
+
 public class Queen extends Piece {
 
+	Set<Move> moves=new LinkedHashSet<Move>();
 	public Queen(char color){
 		this.color=color;
 		this.ID=" "+color+"Q"+" ";
@@ -149,5 +153,145 @@ public class Queen extends Piece {
 		}
 		
 		return "Invalid Move. Try Again.\n";
+	}
+
+	@Override
+	public Set<Move> getAllMoves(Piece[][] newboard) {
+		int d=1;
+		int e=1;
+		int srcrow=location[0];
+		int srccol=location[1];
+		
+		for(int r=srcrow+1; r<8; r++){ 
+			int c=srccol;
+        	if(c+d<=7){
+        		//System.out.println("Bottom Right: "+newboard[r][c+d]);
+        		if(newboard[r][c+d] instanceof BoardNull){
+        			moves.add(new Move(location, ID, r,c+d));
+        		}
+        		else if((!(newboard[r][c+d] instanceof BoardNull)) && (newboard[r][c+d].color!=color)){
+        			moves.add(new Move(location, ID, r,c+d));
+        			break;
+        		}
+        		else if((!(newboard[r][c+d] instanceof BoardNull)) && (newboard[r][c+d].color==color)){
+        			break;
+        		}
+        		d++;
+        	}
+		}
+		for(int r=srcrow+1; r<8; r++){ 
+			int c=srccol;
+        	if(c-e>=0){
+        		//System.out.println("Bottom Left: "+newboard[r][c-e]);
+        		if(newboard[r][c-e] instanceof BoardNull){
+        			moves.add(new Move(location, ID, r,c-e));
+        		}
+        		else if((!(newboard[r][c-e] instanceof BoardNull)) && (newboard[r][c-e].color!=color)){
+        			moves.add(new Move(location, ID, r,c-e));
+        			break;
+        		}
+        		else if((!(newboard[r][c-e] instanceof BoardNull)) && (newboard[r][c-e].color==color)){
+        			break;
+        		}
+        		e++;
+        	}
+        }
+		d=1;
+		for(int r=srcrow-1; r>=0; r--){ 
+			int c=srccol;
+			if(c+d<=7){
+        		//System.out.println("Top Right: "+newboard[r][c+d]);
+				if(newboard[r][c+d] instanceof BoardNull){
+        			moves.add(new Move(location, ID, r,c+d));
+        		}
+        		else if((!(newboard[r][c+d] instanceof BoardNull)) && (newboard[r][c+d].color!=color)){
+        			moves.add(new Move(location, ID, r,c+d));
+        			break;
+        		}
+        		else if((!(newboard[r][c+d] instanceof BoardNull)) && (newboard[r][c+d].color==color)){
+        			break;
+        		}
+        		d++;
+        	}
+		}
+		e=1;
+		for(int r=srcrow-1; r>=0; r--){ 
+			int c=srccol;
+        	if(c-e>=0){
+        		//System.out.println("Top Left: "+newboard[r][c-e]);
+        		if(newboard[r][c-e] instanceof BoardNull){
+        			moves.add(new Move(location, ID, r,c-e));
+        		}
+        		else if((!(newboard[r][c-e] instanceof BoardNull)) && (newboard[r][c-e].color!=color)){
+        			moves.add(new Move(location, ID, r,c-e));
+        			break;
+        		}
+        		else if((!(newboard[r][c-e] instanceof BoardNull)) && (newboard[r][c-e].color==color)){
+        			break;
+        		}
+        		e++;
+        	}
+        }
+		
+		for(int c=srccol+1; c<8; c++){ 
+			int r=srcrow;
+    		//System.out.println("Right: "+newboard[r][c]);
+    		if(newboard[r][c] instanceof BoardNull){
+    			moves.add(new Move(location, ID, r,c));
+    		}
+    		else if((!(newboard[r][c] instanceof BoardNull)) && (newboard[r][c].color!=color)){
+    			moves.add(new Move(location, ID, r,c));
+    			break;
+    		}
+    		else if((!(newboard[r][c] instanceof BoardNull)) && (newboard[r][c].color==color)){
+    			break;
+    		}     	
+		}
+		
+		for(int c=srccol-1; c>=0; c--){ 
+			int r=srcrow;
+    		//System.out.println("Left: "+newboard[r][c]);
+    		if(newboard[r][c] instanceof BoardNull){
+    			moves.add(new Move(location, ID, r,c));
+    		}
+    		else if((!(newboard[r][c] instanceof BoardNull)) && (newboard[r][c].color!=color)){
+    			moves.add(new Move(location, ID, r,c));
+    			break;
+    		}
+    		else if((!(newboard[r][c] instanceof BoardNull)) && (newboard[r][c].color==color)){
+    			break;
+    		}     	
+		}
+		
+		for(int r=srcrow+1; r<8; r++){ 
+			int c=srccol;
+    		//System.out.println("Down: "+newboard[r][c]);
+    		if(newboard[r][c] instanceof BoardNull){
+    			moves.add(new Move(location, ID, r,c));
+    		}
+    		else if((!(newboard[r][c] instanceof BoardNull)) && (newboard[r][c].color!=color)){
+    			moves.add(new Move(location, ID, r,c));
+    			break;
+    		}
+    		else if((!(newboard[r][c] instanceof BoardNull)) && (newboard[r][c].color==color)){
+    			break;
+    		}        	
+		}
+		
+		for(int r=srcrow-1; r>=0; r--){ 
+			int c=srccol;
+    		//System.out.println("Up: "+newboard[r][c]);
+    		if(newboard[r][c] instanceof BoardNull){
+    			moves.add(new Move(location, ID, r,c));
+    		}
+    		else if((!(newboard[r][c] instanceof BoardNull)) && (newboard[r][c].color!=color)){
+    			moves.add(new Move(location, ID, r,c));
+    			break;
+    		}
+    		else if((!(newboard[r][c] instanceof BoardNull)) && (newboard[r][c].color==color)){
+    			break;
+    		}
+		}
+		return moves;
 	}
 }
