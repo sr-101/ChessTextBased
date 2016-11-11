@@ -27,19 +27,6 @@ public class Board {
 	public static boolean bKingCheck=false;
 	public static int[] wKing={7,4};
 	public static boolean wKingCheck=false;
-	public static boolean upcheck=false;
-	public static boolean downcheck=false;
-	public static boolean leftcheck=false;
-	public static boolean rightcheck=false;
-	public static boolean upleftcheck=false;
-	public static boolean uprightcheck=false;
-	public static boolean downleftcheck=false;
-	public static boolean downrightcheck=false;
-	public static boolean leftupcheck=false;
-	public static boolean rightupcheck=false;
-	public static boolean leftdowncheck=false;
-	public static boolean rightdowncheck=false;
-	public static boolean horsecheck=false;
 	
 	public Board(){
 		for(int i=0;i<=8;i++){
@@ -251,7 +238,7 @@ public class Board {
 	}
 	
 	public String isKingInCheck(char color){
-		ArrayList<CheckPiece> result;
+		Set<CheckPiece> result;
 		String c;
 		if(color=='b'){
 			result=isInCheck(bKing);
@@ -264,7 +251,7 @@ public class Board {
 				bKingCheck=true;
 				StringBuilder s=new StringBuilder();
 				for(int i=0;i<result.size();i++){
-					s.append("\nYou are in check from: ").append(result.get(i));
+					s.append("\nYou are in check from: ").append(new ArrayList<CheckPiece>(result).get(i));
 				}
 				return s.toString(); 
 			}
@@ -281,7 +268,7 @@ public class Board {
 				wKingCheck=true;
 				StringBuilder s=new StringBuilder();
 				for(int i=0;i<result.size();i++){
-					s.append("\nYou are in check from: ").append(result.get(i));
+					s.append("\nYou are in check from: ").append(new ArrayList<CheckPiece>(result).get(i));
 				}
 				return s.toString();
 			}
@@ -291,11 +278,11 @@ public class Board {
 	}
 	
 	public static String isInCheckMate(int[] kingloc){
-		boolean check=false;
+		boolean ischeckmate=false;
 		char color=newboard[kingloc[0]][kingloc[1]].color;
 		for(int i=0;i<8;i++){
 			//System.out.println(kingloc[0]+" "+kingloc[1]);
-			ArrayList<CheckPiece> result;
+			Set<CheckPiece> result;
 			int[] temploc = {0,0};
 			switch (i){
 				case 0:
@@ -308,16 +295,17 @@ public class Board {
 							//System.out.println("\nUp");
 							result=isInCheck(temploc);
 							if(!(result.isEmpty())){
-								check=true;
 								Set<Move> allmoves=getAllMoves(color);
+								checkloop:
 								for(CheckPiece cp:result){
 									for(Move m:allmoves){
 										for(Move cpm:cp.getM()){
 											if(!cpm.equals(m)){
-												check=false;
+												ischeckmate=true;
 											}
 											else if(cpm.equals(m)){
-												check=true;
+												ischeckmate=false;
+												break checkloop;
 											}
 										}
 									}
@@ -336,16 +324,17 @@ public class Board {
 							//System.out.println("\nDown");
 							result=isInCheck(temploc);
 							if(!(result.isEmpty())){
-								check=true;
 								Set<Move> allmoves=getAllMoves(color);
+								checkloop:
 								for(CheckPiece cp:result){
 									for(Move m:allmoves){
 										for(Move cpm:cp.getM()){
 											if(!cpm.equals(m)){
-												check=false;
+												ischeckmate=true;
 											}
 											else if(cpm.equals(m)){
-												check=true;
+												ischeckmate=false;
+												break checkloop;
 											}
 										}
 									}
@@ -365,16 +354,17 @@ public class Board {
 							//System.out.println("\nLeft");
 							result=isInCheck(temploc);
 							if(!(result.isEmpty())){
-								check=true;
 								Set<Move> allmoves=getAllMoves(color);
+								checkloop:
 								for(CheckPiece cp:result){
 									for(Move m:allmoves){
 										for(Move cpm:cp.getM()){
 											if(!cpm.equals(m)){
-												check=false;
+												ischeckmate=true;
 											}
 											else if(cpm.equals(m)){
-												check=true;
+												ischeckmate=false;
+												break checkloop;
 											}
 										}
 									}
@@ -394,16 +384,19 @@ public class Board {
 							//System.out.println("\nRight");
 							result=isInCheck(temploc);
 							if(!(result.isEmpty())){
-								check=true;
 								Set<Move> allmoves=getAllMoves(color);
+								checkloop:
 								for(CheckPiece cp:result){
 									for(Move m:allmoves){
 										for(Move cpm:cp.getM()){
+											//System.out.println("CPM: "+cpm);
+											//System.out.println("M: "+m);
 											if(!cpm.equals(m)){
-												check=false;
+												ischeckmate=true;
 											}
 											else if(cpm.equals(m)){
-												check=true;
+												ischeckmate=false;
+												break checkloop;
 											}
 										}
 									}
@@ -423,16 +416,17 @@ public class Board {
 							//System.out.println("\nUp Left");
 							result=isInCheck(temploc);
 							if(!(result.isEmpty())){
-								check=true;
 								Set<Move> allmoves=getAllMoves(color);
+								checkloop:
 								for(CheckPiece cp:result){
 									for(Move m:allmoves){
 										for(Move cpm:cp.getM()){
 											if(!cpm.equals(m)){
-												check=false;
+												ischeckmate=true;
 											}
 											else if(cpm.equals(m)){
-												check=true;
+												ischeckmate=false;
+												break checkloop;
 											}
 										}
 									}
@@ -452,17 +446,21 @@ public class Board {
 							//System.out.println("\nUp Right");
 							result=isInCheck(temploc);
 							if(!(result.isEmpty())){
-								check=true;
 								Set<Move> allmoves=getAllMoves(color);
+								checkloop:
 								for(CheckPiece cp:result){
 									for(Move m:allmoves){
 										for(Move cpm:cp.getM()){
+											System.out.println("CPM: "+cpm);
+											System.out.println("M: "+m);
 											if(!cpm.equals(m)){
-												check=false;
+												ischeckmate=true;
 											}
 											else if(cpm.equals(m)){
-												check=true;
+												ischeckmate=false;
+												break checkloop;
 											}
+											System.out.println("Check: "+ischeckmate);
 										}
 									}
 								}
@@ -481,16 +479,17 @@ public class Board {
 							//System.out.println("\nDown Left");
 							result=isInCheck(temploc);
 							if(!(result.isEmpty())){
-								check=true;
 								Set<Move> allmoves=getAllMoves(color);
+								checkloop:
 								for(CheckPiece cp:result){
 									for(Move m:allmoves){
 										for(Move cpm:cp.getM()){
 											if(!cpm.equals(m)){
-												check=false;
+												ischeckmate=true;
 											}
 											else if(cpm.equals(m)){
-												check=true;
+												ischeckmate=false;
+												break checkloop;
 											}
 										}
 									}
@@ -510,16 +509,17 @@ public class Board {
 							//System.out.println("\nDown Right");
 							result=isInCheck(temploc);
 							if(!(result.isEmpty())){
-								check=true;
 								Set<Move> allmoves=getAllMoves(color);
+								checkloop:
 								for(CheckPiece cp:result){
 									for(Move m:allmoves){
 										for(Move cpm:cp.getM()){
 											if(!cpm.equals(m)){
-												check=false;
+												ischeckmate=true;
 											}
 											else if(cpm.equals(m)){
-												check=true;
+												ischeckmate=false;
+												break checkloop;
 											}
 										}
 									}
@@ -530,22 +530,21 @@ public class Board {
 					break;
 			}
 		}
-		System.out.println(check);
-		if(check){
-			checkmate=true;
+		System.out.println(ischeckmate);
+		if(ischeckmate){
 			return "Checkmate";
 		}
 		return null;
 	}
 	
-	public static ArrayList<CheckPiece> isInCheck(int[] kingloc){
-		ArrayList<CheckPiece> locofCheck=new ArrayList<CheckPiece>();
+	public static Set<CheckPiece> isInCheck(int[] kingloc){
+		Set<CheckPiece> locofCheck=new LinkedHashSet<CheckPiece>();
 		int d=1;
 		int e=1;
 		int srcrow=kingloc[0];
 		int srccol=kingloc[1];
 		Piece king=newboard[kingloc[0]][kingloc[1]];
-		ArrayList<Move> pathtocheck=new ArrayList<Move>();
+		Set<Move> pathtocheck=new LinkedHashSet<Move>();
 		
 		//isInCheck by Bishop or Queen?
 		for(int r=srcrow+1; r<8; r++){
@@ -557,7 +556,6 @@ public class Board {
         			newboard[r][c+d].location[1]=c+d;
         			pathtocheck.add(new Move(r,c+d));
         			if(!pathtocheck.isEmpty()) locofCheck.add(new CheckPiece(newboard[r][c+d],new ArrayList<Move>(pathtocheck)));
-        			downrightcheck=true;
         		}
         		else if((!(newboard[r][c+d] instanceof BoardNull)) && (newboard[r][c+d].color==king.color)){
         			break;
@@ -578,7 +576,6 @@ public class Board {
         			newboard[r][c-e].location[1]=c-e;
         			pathtocheck.add(new Move(r,c-e));
         			if(!pathtocheck.isEmpty()) locofCheck.add(new CheckPiece(newboard[r][c-e],new ArrayList<Move>(pathtocheck)));
-        			downleftcheck=true;
         		}
         		else if((!(newboard[r][c-e] instanceof BoardNull)) && (newboard[r][c-e].color==king.color)){
         			break;
@@ -599,18 +596,17 @@ public class Board {
         			newboard[r][c+d].location[0]=r;
         			newboard[r][c+d].location[1]=c+d;
         			pathtocheck.add(new Move(r,c+d));
-        			System.out.println("Moves: "+pathtocheck);
-        			System.out.println("Moves Size: "+pathtocheck.size());
+        			//System.out.println("Moves: "+pathtocheck);
+        			//System.out.println("Moves Size: "+pathtocheck.size());
         			if(!pathtocheck.isEmpty()) locofCheck.add(new CheckPiece(newboard[r][c+d],new ArrayList<Move>(pathtocheck)));
-        			System.out.println(locofCheck.toString());
-        			uprightcheck=true;
+        			//System.out.println(locofCheck.toString());
         		}
         		else if((!(newboard[r][c+d] instanceof BoardNull)) && (newboard[r][c+d].color==king.color)){
         			break;
         		}
         		else if(newboard[r][c+d] instanceof BoardNull){
         			pathtocheck.add(new Move(r,c+d));
-        			System.out.println("Moves: "+pathtocheck);
+        			//System.out.println("Moves: "+pathtocheck);
         		}
         		d++;
         	}
@@ -626,7 +622,6 @@ public class Board {
         			newboard[r][c-e].location[1]=c-e;
         			pathtocheck.add(new Move(r,c-e));
         			if(!pathtocheck.isEmpty()) locofCheck.add(new CheckPiece(newboard[r][c-e],new ArrayList<Move>(pathtocheck)));
-        			upleftcheck=true;
         		}
         		else if((!(newboard[r][c-e] instanceof BoardNull)) && (newboard[r][c-e].color==king.color)){
         			break;
@@ -646,7 +641,6 @@ public class Board {
     			newboard[r][c].location[1]=c;
     			pathtocheck.add(new Move(r,c));
     			if(!pathtocheck.isEmpty()) locofCheck.add(new CheckPiece(newboard[r][c],new ArrayList<Move>(pathtocheck)));
-    			rightcheck=true;
     		}
     		else if(((!(newboard[r][c] instanceof BoardNull)) && (newboard[r][c].color==king.color))||(((newboard[r][c] instanceof Pawn)) && (newboard[r][c].color!=king.color))){
     			break;
@@ -664,7 +658,6 @@ public class Board {
     			newboard[r][c].location[1]=c;
     			pathtocheck.add(new Move(r,c));
     			if(!pathtocheck.isEmpty()) locofCheck.add(new CheckPiece(newboard[r][c],new ArrayList<Move>(pathtocheck)));
-    			leftcheck=true;
     		}
     		else if(((!(newboard[r][c] instanceof BoardNull)) && (newboard[r][c].color==king.color))||(((newboard[r][c] instanceof Pawn)) && (newboard[r][c].color!=king.color))){
     			break;
@@ -682,7 +675,6 @@ public class Board {
     			newboard[r][c].location[1]=c;
     			pathtocheck.add(new Move(r,c));
     			if(!pathtocheck.isEmpty()) locofCheck.add(new CheckPiece(newboard[r][c],new ArrayList<Move>(pathtocheck)));
-    			downcheck=true;
     		}
     		else if(((!(newboard[r][c] instanceof BoardNull)) && (newboard[r][c].color==king.color))||(((newboard[r][c] instanceof Pawn)) && (newboard[r][c].color!=king.color))){
     			break;
@@ -700,7 +692,6 @@ public class Board {
     			newboard[r][c].location[1]=c;
     			pathtocheck.add(new Move(r,c));
     			if(!pathtocheck.isEmpty()) locofCheck.add(new CheckPiece(newboard[r][c],new ArrayList<Move>(pathtocheck)));
-    			upcheck=true;
     		}
     		else if(((!(newboard[r][c] instanceof BoardNull)) && (newboard[r][c].color==king.color))||(((newboard[r][c] instanceof Pawn)) && (newboard[r][c].color!=king.color))){
     			break;
@@ -721,8 +712,6 @@ public class Board {
 						newboard[r+2][c-1].location[1]=c-1;
 						pathtocheck.add(new Move(r+2,c-1));
 						locofCheck.add(new CheckPiece(newboard[r+2][c-1],new ArrayList<Move>(pathtocheck)));
-						downleftcheck=true;
-						horsecheck=true;
 					}
 				}
 			case 1:
@@ -733,8 +722,6 @@ public class Board {
 						newboard[r+2][c+1].location[1]=c+1;
 						pathtocheck.add(new Move(r+2,c+1));
 						locofCheck.add(new CheckPiece(newboard[r+2][c+1],new ArrayList<Move>(pathtocheck)));
-						downrightcheck=true;
-						horsecheck=true;
 					}
 				}
 			case 2:
@@ -745,8 +732,6 @@ public class Board {
 						newboard[r-2][c-1].location[1]=c-1;
 						pathtocheck.add(new Move(r-2,c-1));
 						locofCheck.add(new CheckPiece(newboard[r-2][c-1],new ArrayList<Move>(pathtocheck)));
-						upleftcheck=true;
-						horsecheck=true;
 					}
 				}
 			case 3:
@@ -757,8 +742,6 @@ public class Board {
 						newboard[r-2][c+1].location[1]=c+1;
 						pathtocheck.add(new Move(r-2,c+1));
 						locofCheck.add(new CheckPiece(newboard[r-2][c+1],new ArrayList<Move>(pathtocheck)));
-						uprightcheck=true;
-						horsecheck=true;
 					}
 				}
 			case 4:
@@ -769,8 +752,6 @@ public class Board {
 						newboard[r+1][c-2].location[1]=c-2;
 						pathtocheck.add(new Move(r+1,c-2));
 						locofCheck.add(new CheckPiece(newboard[r+1][c-2],new ArrayList<Move>(pathtocheck)));
-						leftdowncheck=true;
-						horsecheck=true;
 					}
 				}
 			case 5:
@@ -781,8 +762,6 @@ public class Board {
 						newboard[r+1][c+2].location[1]=c+2;
 						pathtocheck.add(new Move(r+1,c+2));
 						locofCheck.add(new CheckPiece(newboard[r+1][c+2],new ArrayList<Move>(pathtocheck)));
-						rightdowncheck=true;
-						horsecheck=true;
 					}
 				}
 			case 6: 
@@ -793,8 +772,6 @@ public class Board {
 						newboard[r-1][c-2].location[1]=c-2;
 						pathtocheck.add(new Move(r-1,c-2));
 						locofCheck.add(new CheckPiece(newboard[r-1][c-2],new ArrayList<Move>(pathtocheck)));
-						leftupcheck=true;
-						horsecheck=true;
 					}
 				}
 			case 7:
@@ -805,8 +782,6 @@ public class Board {
 						newboard[r-1][c+2].location[1]=c+2;
 						pathtocheck.add(new Move(r-1,c+2));
 						locofCheck.add(new CheckPiece(newboard[r-1][c+2],new ArrayList<Move>(pathtocheck)));
-						rightupcheck=true;
-						horsecheck=true;
 					}
 				}
 			}
@@ -830,7 +805,7 @@ public class Board {
 		for(int i=0;i<8;i++){
 			for(int j=0;j<8;j++){
 				if(newboard[i][j].color==color){
-					System.out.println(newboard[i][j].ID+" "+newboard[i][j].getAllMoves(newboard));
+					//System.out.println(newboard[i][j].ID+" "+newboard[i][j].getAllMoves(newboard));
 					allmoves.addAll(newboard[i][j].getAllMoves(newboard));
 				}
 			}

@@ -141,42 +141,39 @@ public class Pawn extends Piece{
 
 	@Override
 	public Set<Move> getAllMoves(Piece[][] newboard) {
-		if(color=='b'){
+		if(color=='b' && location[0]+1<7){
 			if(!(newboard[location[0]][location[1]]).moved){
 				if((newboard[location[0]+2][location[1]] instanceof BoardNull)){
 					moves.add(new Move(location, ID, location[0]+2,location[1]));
 				}
 			}
-			else if(newboard[location[0]][location[1]].moved){
-				if((newboard[location[0]+1][location[1]] instanceof BoardNull)){
-					moves.add(new Move(location, ID, location[0]+1,location[1]));
-				}
-				if(!(newboard[location[0]+1][location[1]+1] instanceof BoardNull) && (newboard[location[0]+1][location[1]+1].color!=color)){
-					moves.add(new Move(location, ID, location[0]+1,location[1]+1));
-				}
-				if(!(newboard[location[0]+1][location[1]-1] instanceof BoardNull) && (newboard[location[0]+1][location[1]-1].color!=color)){
-					moves.add(new Move(location, ID, location[0]+1,location[1]-1));
-				}
+			if((newboard[location[0]+1][location[1]] instanceof BoardNull)){
+				moves.add(new Move(location, ID, location[0]+1,location[1]));
+			}
+			if((location[1]-1<7) && (!(newboard[location[0]+1][location[1]+1] instanceof BoardNull) && (newboard[location[0]+1][location[1]+1].color!=color))){
+				moves.add(new Move(location, ID, location[0]+1,location[1]+1));
+			}
+			if((location[1]-1>0) && (!(newboard[location[0]+1][location[1]-1] instanceof BoardNull) && (newboard[location[0]+1][location[1]-1].color!=color))){
+				moves.add(new Move(location, ID, location[0]+1,location[1]-1));
 			}
 		}
-		else if(color=='w'){
+		else if(color=='w' && location[0]-1>0){
 			if(!(newboard[location[0]][location[1]]).moved){
 				if((newboard[location[0]-2][location[1]] instanceof BoardNull)){
 					moves.add(new Move(location, ID, location[0]-2,location[1]));
 				}
 			}
-			else if(newboard[location[0]][location[1]].moved){
-				if((newboard[location[0]-1][location[1]] instanceof BoardNull)){
-					moves.add(new Move(location, ID, location[0]-1,location[1]));
-				}
-				if(!(newboard[location[0]-1][location[1]+1] instanceof BoardNull) && (newboard[location[0]-1][location[1]+1].color!=color)){
-					moves.add(new Move(location, ID, location[0]-1,location[1]+1));
-				}
-				if(!(newboard[location[0]-1][location[1]-1] instanceof BoardNull) && (newboard[location[0]-1][location[1]-1].color!=color)){
-					moves.add(new Move(location, ID, location[0]-1,location[1]-1));
-				}
+			if((newboard[location[0]-1][location[1]] instanceof BoardNull)){
+				moves.add(new Move(location, ID, location[0]-1,location[1]));
+			}
+			if((location[1]-1<7) && (!(newboard[location[0]-1][location[1]+1] instanceof BoardNull) && (newboard[location[0]-1][location[1]+1].color!=color))){
+				moves.add(new Move(location, ID, location[0]-1,location[1]+1));
+			}
+			if((location[1]-1>0) && (!(newboard[location[0]-1][location[1]-1] instanceof BoardNull) && (newboard[location[0]-1][location[1]-1].color!=color))){
+				moves.add(new Move(location, ID, location[0]-1,location[1]-1));
 			}
 		}
+		System.out.println("Pawn Possible Moves: "+moves);
 		return moves;
 	}
 	
