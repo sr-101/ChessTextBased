@@ -1,5 +1,7 @@
 package pieces;
 
+import java.util.Arrays;
+
 public class Move {
 	int[] origin;
 	String ID;
@@ -53,8 +55,10 @@ public class Move {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
+		result = prime * result + ((ID == null) ? 0 : ID.hashCode());
 		result = prime * result + i;
 		result = prime * result + j;
+		result = prime * result + Arrays.hashCode(origin);
 		return result;
 	}
 
@@ -67,9 +71,16 @@ public class Move {
 		if (getClass() != obj.getClass())
 			return false;
 		Move other = (Move) obj;
+		if (ID == null) {
+			if (other.ID != null)
+				return false;
+		} else if (!ID.equals(other.ID))
+			return false;
 		if (i != other.i)
 			return false;
 		if (j != other.j)
+			return false;
+		if (!Arrays.equals(origin, other.origin))
 			return false;
 		return true;
 	}

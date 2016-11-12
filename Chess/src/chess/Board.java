@@ -246,13 +246,14 @@ public class Board {
 			if (!result.isEmpty()){
 				c=isInCheckMate(bKing);
 				if(c!=null){ 
-					//System.out.println("C: "+c); 
+					System.out.println("White wins.");
+					checkmate=true;
 					return c;
 				}
 				bKingCheck=true;
 				StringBuilder s=new StringBuilder();
 				for(int i=0;i<result.size();i++){
-					s.append("\nYou are in check from: ").append(new ArrayList<CheckPiece>(result).get(i));
+					s.append("Check");
 				}
 				return s.toString(); 
 			}
@@ -263,13 +264,14 @@ public class Board {
 			if (!result.isEmpty()){
 				c=isInCheckMate(wKing);
 				if(c!=null){ 
-					//System.out.println("C: "+c); 
+					System.out.println("Black wins.");
+					checkmate=true;
 					return c;
 				}
 				wKingCheck=true;
 				StringBuilder s=new StringBuilder();
 				for(int i=0;i<result.size();i++){
-					s.append("\nYou are in check from: ").append(new ArrayList<CheckPiece>(result).get(i));
+					s.append("Check");
 				}
 				return s.toString();
 			}
@@ -288,15 +290,15 @@ public class Board {
 			for(CheckPiece cp:result){
 				for(Move m:allmoves){
 					for(Move cpm:cp.getM()){
-						System.out.println("Path of Check: "+cpm);
-						System.out.println("Same Color Moves: "+m);
+						//System.out.println("Path of Check: "+cpm);
+						//System.out.println("Same Color Moves: "+m);
 						if(cpm.getI()!=m.getI() || cpm.getJ()!=m.getJ()){
 							ischeckmate=true;
 						}
 						else if(cpm.getI()==m.getI() && cpm.getJ()==m.getJ()){
 							if((cp.getM().size()==1) && !(m.getID().contains("K"))){
 								String s=newboard[m.getOrigin()[0]][m.getOrigin()[1]].move(newboard, m.getOrigin()[0], m.getOrigin()[1], m.getI(), m.getJ());
-								System.out.println("S: "+s);
+								//System.out.println("S: "+s);
 								if(s!=null){
 									ischeckmate=true;
 								}
@@ -305,9 +307,9 @@ public class Board {
 									break checkloop;
 								}
 							}
-							else if((cp.getM().size()==1) && (m.getID().contains("K"))){
+							else if((m.getID().contains("K"))){
 								String s=newboard[kingloc[0]][kingloc[1]].move(newboard, kingloc[0],kingloc[1], m.getI(), m.getJ());
-								System.out.println("S: "+s);
+								//System.out.println("S: "+s);
 								if(s!=null){
 									ischeckmate=true;
 								}
@@ -317,16 +319,17 @@ public class Board {
 								}
 							}
 							else{
+								//System.out.println("Else M: " + m + " CPM: " + cpm + " CPM Size: "+ cp.getM().size());
 								ischeckmate=false;
 								break checkloop;
 							}
 						}
-						System.out.println("IsCheckmate: "+ischeckmate);
+						//System.out.println("IsCheckmate: "+ischeckmate);
 					}
 				}
 			}
 		}
-		System.out.println(ischeckmate);
+		//System.out.println(ischeckmate);
 		if(ischeckmate){
 			return "Checkmate";
 		}
