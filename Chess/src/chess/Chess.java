@@ -11,15 +11,29 @@ public class Chess {
 				System.out.println("White's Move: ");
 				BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 				String srcdest = br.readLine();
-				if(srcdest.length()==5){
-					String src=srcdest.substring(0,2);
-					String dest=srcdest.substring(3,5);
+				if(srcdest.split(" ").length==3||srcdest.split(" ").length==2){
+					String src=srcdest.split(" ")[0];
+					String dest=srcdest.split(" ")[1];
+					if(srcdest.split(" ").length==3){
+						Board.promotion=srcdest.split(" ")[2].charAt(0);
+					}
 					if(newBoard.move(src, dest)==0){
 						newBoard.turnBorW='b';
 						if(newBoard.isKingInCheck('b')!=null)
 						System.out.println(newBoard.isKingInCheck('b'));
 					}
-					//System.out.println("White King: " + newBoard.checkforKing('w'));
+				}
+				else if(srcdest.equalsIgnoreCase("Resign")){
+					System.out.println("Resign");
+					Board.checkmate=true;
+				}
+				else if(srcdest.contains("draw?")){
+					System.out.println("Do you accept the draw?");
+					String next = br.readLine();
+					if(next.equalsIgnoreCase("draw")){
+						System.out.println("Draw");
+						Board.checkmate=true;
+					}
 				}
 				else{
 					System.out.println("Invalid Move. Try Again.\n");
@@ -30,15 +44,29 @@ public class Chess {
 				System.out.println("Black's Move: ");
 				BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 				String srcdest = br.readLine();
-				if(srcdest.length()==5){
-					String src=srcdest.substring(0,2);
-					String dest=srcdest.substring(3,5);
+				if(srcdest.split(" ").length==3||srcdest.split(" ").length==2){
+					String src=srcdest.split(" ")[0];
+					String dest=srcdest.split(" ")[1];
+					if(srcdest.split(" ").length==3){
+						Board.promotion=srcdest.split(" ")[2].charAt(0);
+					}
 					if(newBoard.move(src, dest)==0){
 						newBoard.turnBorW='w';
 						if(newBoard.isKingInCheck('w')!=null)
 						System.out.println(newBoard.isKingInCheck('w'));
 					}
-					//System.out.println("Black King: " + newBoard.checkforKing('b'));
+				}
+				else if(srcdest.equalsIgnoreCase("Resign")){
+					System.out.println("Resign");
+					Board.checkmate=true;
+				}
+				else if(srcdest.contains("draw?")){
+					System.out.println("Do you accept the draw?");
+					String next = br.readLine();
+					if(next.equalsIgnoreCase("draw")){
+						System.out.println("Draw");
+						Board.checkmate=true;
+					}
 				}
 				else{
 					System.out.println("Invalid Move. Try Again.\n");
