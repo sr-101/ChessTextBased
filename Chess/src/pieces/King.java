@@ -68,9 +68,9 @@ public class King extends Piece {
 							(newboard[destrow][destcol+1].moved==false)  
 								){
 							
-							int c=srccol;
+							int c=srccol+1;
 							for(;c<destcol; c++){
-								if((!(newboard[srcrow][c] instanceof BoardNull)) || !(Board.getKingBoolean(newboard[srcrow][c].color))){ //there is a piece b/w king and rook or king will pass through a space that is in check
+								if((!(newboard[srcrow][c] instanceof BoardNull))){ //there is a piece b/w king and rook or king will pass through a space that is in check
 									return "Invalid castling Move. Try Again.\n";
 								}
 							}
@@ -80,7 +80,7 @@ public class King extends Piece {
 							newboard[srcrow][destcol+1]=new BoardNull(srcrow,srccol+1);
 							chess.Board.castlingw=true;
 							moved=true; //do i have to mark moved true for rook too?
-							return "you're castling!";
+							return null;
 							
 						}//end if
 						return "You went into moving right loop";
@@ -90,14 +90,12 @@ public class King extends Piece {
 						if(
 								(newboard[destrow][destcol-2].ID.contains("R")) &&
 								(newboard[destrow][destcol-2].color==color) &&
-								(newboard[destrow][destcol-2].moved==false) &&
-								(Board.getKingBoolean(color)) &&
-								(Board.getKingBoolean(newboard[destrow][destcol].color)) 
+								(newboard[destrow][destcol-2].moved==false)
 									){
-								
-								int c=srccol;
+							
+								int c=srccol-1;
 								for(;c>destcol; c--){
-									if((!(newboard[srcrow][c] instanceof BoardNull)) || !(Board.getKingBoolean(newboard[srcrow][c].color))){ //there is a piece b/w king and rook or king will pass through a space that is in check
+									if((!(newboard[srcrow][c] instanceof BoardNull))){ //there is a piece b/w king and rook or king will pass through a space that is in check
 										return "Invalid castling Move. Try Again.\n";
 									}
 								}
@@ -121,14 +119,12 @@ public class King extends Piece {
 						if(
 							(newboard[destrow][destcol+1].ID.contains("R")) &&
 							(newboard[destrow][destcol+1].color==color) &&
-							(newboard[destrow][destcol+1].moved==false) &&
-							(Board.getKingBoolean(color)) &&
-							(Board.getKingBoolean(newboard[destrow][destcol].color)) 
+							(newboard[destrow][destcol+1].moved==false)
 								){
 							
-							int c=srccol;
+							int c=srccol+1;
 							for(;c<destcol; c++){
-								if((!(newboard[srcrow][c] instanceof BoardNull)) || !(Board.getKingBoolean(newboard[srcrow][c].color))){ //there is a piece b/w king and rook or king will pass through a space that is in check
+								if((!(newboard[srcrow][c] instanceof BoardNull))){ //there is a piece b/w king and rook or king will pass through a space that is in check
 									return "Invalid Move. Try Again.\n";
 								}
 							}
@@ -147,14 +143,12 @@ public class King extends Piece {
 						if(
 								(newboard[destrow][destcol-2].ID.contains("R")) &&
 								(newboard[destrow][destcol-2].color==color) &&
-								(newboard[destrow][destcol-2].moved==false) &&
-								(Board.getKingBoolean(color)) &&
-								(Board.getKingBoolean(newboard[destrow][destcol].color)) 
+								(newboard[destrow][destcol-2].moved==false)
 									){
 								
-								int c=srccol;
+								int c=srccol-1;
 								for(;c>destcol; c--){
-									if((!(newboard[srcrow][c] instanceof BoardNull)) || !(Board.getKingBoolean(newboard[srcrow][c].color))){ //there is a piece b/w king and rook or king will pass through a space that is in check
+									if((!(newboard[srcrow][c] instanceof BoardNull))){ //there is a piece b/w king and rook or king will pass through a space that is in check
 										return "Invalid Move. Try Again.\n";
 									}
 								}
