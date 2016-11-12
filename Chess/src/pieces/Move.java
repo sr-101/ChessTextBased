@@ -7,7 +7,6 @@ public class Move {
 	int j;
 	
 	public Move(int[] origin,String ID, int i, int j){
-		this.origin=origin;
 		this.ID=ID;
 		this.i=i;
 		this.j=j;
@@ -32,6 +31,22 @@ public class Move {
 
 	public void setJ(int j) {
 		this.j = j;
+	}
+
+	public int[] getOrigin() {
+		return origin;
+	}
+
+	public void setOrigin(int[] origin) {
+		this.origin = origin;
+	}
+
+	public String getID() {
+		return ID;
+	}
+
+	public void setID(String iD) {
+		ID = iD;
 	}
 
 	@Override

@@ -1,10 +1,9 @@
 package pieces;
 
-import java.util.ArrayList;
 import java.util.Set;
 
 public class BoardNull extends Piece{
-
+	
 	public BoardNull(int i,int j){
 		this.color='X';
 		if(j==8 && i<8){

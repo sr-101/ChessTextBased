@@ -6,7 +6,7 @@ import java.util.Set;
 import chess.Board;
 
 public class King extends Piece {
-	Set<Move> moves=new LinkedHashSet<Move>();
+	Set<Move> allmoves=new LinkedHashSet<Move>();
 
 	public King(char color){
 		this.color=color;
@@ -54,42 +54,125 @@ public class King extends Piece {
 				}
 				return null;
 			}
-		}
-		else if(srcrow==destrow && ((Math.abs(srccol-destcol)==2) || (Math.abs(srccol-destcol)==3))){ //castling move
-			if(
-				(chess.Board.castling==false) && //there has been no other instance of castling in the game - once per side or game?
-				(moved==false) && //king has not moved
-				(newboard[destrow][destcol].ID.contains("R")) && //there's a Rook
-				(newboard[destrow][destcol].color==color) && //Rook is same color as King we want to move
-				(newboard[destrow][destcol].moved==false) && //Rook has also not moved 
-				(Board.getKingBoolean(color)) && //king is not in check
-				(Board.getKingBoolean(newboard[destrow][destcol].color)) //destination is not in check
-				) 
-				{
-					int c=srccol;
-					for(;c<destcol; c++){
-						if((!(newboard[srcrow][c] instanceof BoardNull)) || !(Board.getKingBoolean(newboard[srcrow][c].color))){ //there is a piece b/w king and rook or king will pass through a space that is in check
-							return "Invalid Move. Try Again.\n";
+		
+		}// moving 1 ended
+			else if(srcrow==destrow && (Math.abs(srccol-destcol)==2) ){ //castling move
+			
+			if(color=='w'){
+				if((chess.Board.castlingw==false) && (moved==false) ){ //king has not moved and white had no castling
+					
+					if(srccol+2==destcol){ //moving right
+						if(
+							(newboard[destrow][destcol+1] instanceof Rook) &&
+							(newboard[destrow][destcol+1].color==color) &&
+							(newboard[destrow][destcol+1].moved==false)  
+								){
+							
+							int c=srccol;
+							for(;c<destcol; c++){
+								if((!(newboard[srcrow][c] instanceof BoardNull)) || !(Board.getKingBoolean(newboard[srcrow][c].color))){ //there is a piece b/w king and rook or king will pass through a space that is in check
+									return "Invalid castling Move. Try Again.\n";
+								}
+							}
+							newboard[destrow][destcol]=newboard[srcrow][srccol];
+							newboard[srcrow][srccol]=new BoardNull(srcrow,srccol);
+							newboard[destrow][destcol-1]=newboard[srcrow][destcol+1];
+							newboard[srcrow][destcol+1]=new BoardNull(srcrow,srccol+1);
+							chess.Board.castlingw=true;
+							moved=true; //do i have to mark moved true for rook too?
+							return "you're castling!";
+							
+						}//end if
+						return "You went into moving right loop";
+					} //end move right
+					
+					else if(srccol-2==destcol){//moving left
+						if(
+								(newboard[destrow][destcol-2].ID.contains("R")) &&
+								(newboard[destrow][destcol-2].color==color) &&
+								(newboard[destrow][destcol-2].moved==false) &&
+								(Board.getKingBoolean(color)) &&
+								(Board.getKingBoolean(newboard[destrow][destcol].color)) 
+									){
+								
+								int c=srccol;
+								for(;c>destcol; c--){
+									if((!(newboard[srcrow][c] instanceof BoardNull)) || !(Board.getKingBoolean(newboard[srcrow][c].color))){ //there is a piece b/w king and rook or king will pass through a space that is in check
+										return "Invalid castling Move. Try Again.\n";
+									}
+								}
+								newboard[destrow][destcol]=newboard[srcrow][srccol];
+								newboard[srcrow][srccol]=new BoardNull(srcrow,srccol);
+								newboard[destrow][destcol+1]=newboard[srcrow][destcol-2];
+								newboard[srcrow][destcol-2]=new BoardNull(srcrow,srccol-2);
+								chess.Board.castlingw=true;
+								moved=true; //do i have to mark moved true for rook too?
+								return null;
+								
+							}
+						}
+				}
+				}
+			
+			if(color=='b'){
+				if((chess.Board.castlingb==false) && (moved==false) ){ //king has not moved and white had no castling
+					
+					if(srccol+2==destcol){ //moving right
+						if(
+							(newboard[destrow][destcol+1].ID.contains("R")) &&
+							(newboard[destrow][destcol+1].color==color) &&
+							(newboard[destrow][destcol+1].moved==false) &&
+							(Board.getKingBoolean(color)) &&
+							(Board.getKingBoolean(newboard[destrow][destcol].color)) 
+								){
+							
+							int c=srccol;
+							for(;c<destcol; c++){
+								if((!(newboard[srcrow][c] instanceof BoardNull)) || !(Board.getKingBoolean(newboard[srcrow][c].color))){ //there is a piece b/w king and rook or king will pass through a space that is in check
+									return "Invalid Move. Try Again.\n";
+								}
+							}
+							newboard[destrow][destcol]=newboard[srcrow][srccol];
+							newboard[srcrow][srccol]=new BoardNull(srcrow,srccol);
+							newboard[destrow][destcol-1]=newboard[srcrow][destcol+1];
+							newboard[srcrow][destcol+1]=new BoardNull(srcrow,srccol+1);
+							chess.Board.castlingw=true;
+							moved=true; //do i have to mark moved true for rook too?
+							return null;
+							
 						}
 					}
-					newboard[destrow][destcol]=newboard[srcrow][srccol];
-					Piece temp=newboard[destrow][destcol];
-					newboard[srcrow][srccol]=temp;
 					
-					if(color=='b'){
-						Board.bKing[0]=destrow;
-						Board.bKing[1]=destcol;
-					}
-					else if(color=='w'){
-						Board.wKing[0]=destrow;
-						Board.wKing[1]=destcol;
-					}
-					return null;
-				}
-				return "Invalid castling Move. Try Again.\n";
-			}
-		return null;
-		}
+					else if(srccol-2==destcol){//moving left
+						if(
+								(newboard[destrow][destcol-2].ID.contains("R")) &&
+								(newboard[destrow][destcol-2].color==color) &&
+								(newboard[destrow][destcol-2].moved==false) &&
+								(Board.getKingBoolean(color)) &&
+								(Board.getKingBoolean(newboard[destrow][destcol].color)) 
+									){
+								
+								int c=srccol;
+								for(;c>destcol; c--){
+									if((!(newboard[srcrow][c] instanceof BoardNull)) || !(Board.getKingBoolean(newboard[srcrow][c].color))){ //there is a piece b/w king and rook or king will pass through a space that is in check
+										return "Invalid Move. Try Again.\n";
+									}
+								}
+								newboard[destrow][destcol]=newboard[srcrow][srccol];
+								newboard[srcrow][srccol]=new BoardNull(srcrow,srccol);
+								newboard[destrow][destcol+1]=newboard[srcrow][destcol-2];
+								newboard[srcrow][destcol-2]=new BoardNull(srcrow,srccol-2);
+								chess.Board.castlingw=true;
+								moved=true; //do i have to mark moved true for rook too?
+								return null;
+								
+							} //end if
+					}//end moving left
+		} //end if boolean false
+	} //end if black
+	} //end castling
+		return "Invalid Move. Try Again\n";
+	}//end move method
 
 	@Override
 	public Set<Move> getAllMoves(Piece[][] newboard) {
@@ -105,7 +188,7 @@ public class King extends Piece {
 						//System.out.println(temploc[0]+" "+temploc[1]);
 						if(newboard[temploc[0]][temploc[1]] instanceof BoardNull){
 							//System.out.println("\nUp");
-							moves.add(new Move(location, ID, temploc[0],temploc[1]));
+							allmoves.add(new Move(location, ID, temploc[0],temploc[1]));
 						}
 					}
 					break;
@@ -117,7 +200,7 @@ public class King extends Piece {
 						//System.out.println(temploc[0]+" "+temploc[1]);
 						if(newboard[temploc[0]][temploc[1]] instanceof BoardNull){
 							//System.out.println("\nDown");
-							moves.add(new Move(location, ID, temploc[0],temploc[1]));
+							allmoves.add(new Move(location, ID, temploc[0],temploc[1]));
 						}
 					}
 					break;
@@ -129,7 +212,7 @@ public class King extends Piece {
 						//System.out.println(temploc[0]+" "+temploc[1]);
 						if(newboard[temploc[0]][temploc[1]] instanceof BoardNull){
 							//System.out.println("\nLeft");
-							moves.add(new Move(location, ID, temploc[0],temploc[1]));
+							allmoves.add(new Move(location, ID, temploc[0],temploc[1]));
 						}
 					}
 					break;
@@ -141,7 +224,7 @@ public class King extends Piece {
 						//System.out.println(temploc[0]+" "+temploc[1]);
 						if(newboard[temploc[0]][temploc[1]] instanceof BoardNull){
 							//System.out.println("\nRight");
-							moves.add(new Move(location, ID, temploc[0],temploc[1]));
+							allmoves.add(new Move(location, ID, temploc[0],temploc[1]));
 						}
 					}
 					break;
@@ -153,7 +236,7 @@ public class King extends Piece {
 						//System.out.println(temploc[0]+" "+temploc[1]);
 						if(newboard[temploc[0]][temploc[1]] instanceof BoardNull){
 							//System.out.println("\nUp Left");
-							moves.add(new Move(location, ID, temploc[0],temploc[1]));
+							allmoves.add(new Move(location, ID, temploc[0],temploc[1]));
 						}
 					}
 					break;
@@ -165,7 +248,7 @@ public class King extends Piece {
 						//System.out.println(temploc[0]+" "+temploc[1]);
 						if(newboard[temploc[0]][temploc[1]] instanceof BoardNull){
 							//System.out.println("\nUp Right");
-							moves.add(new Move(location, ID, temploc[0],temploc[1]));
+							allmoves.add(new Move(location, ID, temploc[0],temploc[1]));
 						}
 					}
 					break;
@@ -177,7 +260,7 @@ public class King extends Piece {
 						//System.out.println(temploc[0]+" "+temploc[1]);
 						if(newboard[temploc[0]][temploc[1]] instanceof BoardNull){
 							//System.out.println("\nDown Left");
-							moves.add(new Move(location, ID, temploc[0],temploc[1]));
+							allmoves.add(new Move(location, ID, temploc[0],temploc[1]));
 						}
 					}
 					break;
@@ -189,12 +272,13 @@ public class King extends Piece {
 						//System.out.println(temploc[0]+" "+temploc[1]);
 						if(newboard[temploc[0]][temploc[1]] instanceof BoardNull){
 							//System.out.println("\nDown Right");
-							moves.add(new Move(location, ID, temploc[0],temploc[1]));
+							allmoves.add(new Move(location, ID, temploc[0],temploc[1]));
 						}
 					}
 					break;
 			}
 		}
-		return moves;
+		//System.out.println("All King Moves: "+allmoves);
+		return allmoves;
 	}
 }

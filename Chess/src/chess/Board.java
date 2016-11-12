@@ -19,7 +19,8 @@ public class Board {
 	static Piece[][] newboard=new Piece[9][9];
 	public static boolean checkmate=false;
 	boolean stalemate=false;
-	public static boolean castling=false;
+	public static boolean castlingb=false;
+	public static boolean castlingw=false;
 	public static char promotion;
 	public static boolean nextMoveEP=false;
 	char turnBorW='w';
@@ -241,11 +242,11 @@ public class Board {
 		Set<CheckPiece> result;
 		String c;
 		if(color=='b'){
-			result=isInCheck(bKing);
+			result=isInCheck(bKing,color);
 			if (!result.isEmpty()){
 				c=isInCheckMate(bKing);
 				if(c!=null){ 
-					System.out.println("C: "+c); 
+					//System.out.println("C: "+c); 
 					return c;
 				}
 				bKingCheck=true;
@@ -258,11 +259,11 @@ public class Board {
 			return null;
 		}
 		else if(color=='w'){
-			result=isInCheck(wKing);
+			result=isInCheck(wKing,color);
 			if (!result.isEmpty()){
 				c=isInCheckMate(wKing);
 				if(c!=null){ 
-					System.out.println("C: "+c); 
+					//System.out.println("C: "+c); 
 					return c;
 				}
 				wKingCheck=true;
@@ -280,254 +281,49 @@ public class Board {
 	public static String isInCheckMate(int[] kingloc){
 		boolean ischeckmate=false;
 		char color=newboard[kingloc[0]][kingloc[1]].color;
-		for(int i=0;i<8;i++){
-			//System.out.println(kingloc[0]+" "+kingloc[1]);
-			Set<CheckPiece> result;
-			int[] temploc = {0,0};
-			switch (i){
-				case 0:
-					//Up
-					if(kingloc[0]-1>=0){
-						temploc[0]=kingloc[0]-1;
-						temploc[1]=kingloc[1];
-						//System.out.println(temploc[0]+" "+temploc[1]);
-						if(newboard[temploc[0]][temploc[1]] instanceof BoardNull){
-							//System.out.println("\nUp");
-							result=isInCheck(temploc);
-							if(!(result.isEmpty())){
-								Set<Move> allmoves=getAllMoves(color);
-								checkloop:
-								for(CheckPiece cp:result){
-									for(Move m:allmoves){
-										for(Move cpm:cp.getM()){
-											if(!cpm.equals(m)){
-												ischeckmate=true;
-											}
-											else if(cpm.equals(m)){
-												ischeckmate=false;
-												break checkloop;
-											}
-										}
-									}
+		Set<CheckPiece> result=isInCheck(kingloc,color);
+		if(!(result.isEmpty())){
+			Set<Move> allmoves=getAllMoves(color);
+			checkloop:
+			for(CheckPiece cp:result){
+				for(Move m:allmoves){
+					for(Move cpm:cp.getM()){
+						System.out.println("Path of Check: "+cpm);
+						System.out.println("Same Color Moves: "+m);
+						if(cpm.getI()!=m.getI() || cpm.getJ()!=m.getJ()){
+							ischeckmate=true;
+						}
+						else if(cpm.getI()==m.getI() && cpm.getJ()==m.getJ()){
+							if((cp.getM().size()==1) && !(m.getID().contains("K"))){
+								String s=newboard[m.getOrigin()[0]][m.getOrigin()[1]].move(newboard, m.getOrigin()[0], m.getOrigin()[1], m.getI(), m.getJ());
+								System.out.println("S: "+s);
+								if(s!=null){
+									ischeckmate=true;
+								}
+								else{
+									ischeckmate=false;
+									break checkloop;
 								}
 							}
-						}
-					}
-					break;
-				case 1:
-					//Down
-					if(kingloc[0]+1<=7){
-						temploc[0]=kingloc[0]+1;
-						temploc[1]=kingloc[1];
-						//System.out.println(temploc[0]+" "+temploc[1]);
-						if(newboard[temploc[0]][temploc[1]] instanceof BoardNull){
-							//System.out.println("\nDown");
-							result=isInCheck(temploc);
-							if(!(result.isEmpty())){
-								Set<Move> allmoves=getAllMoves(color);
-								checkloop:
-								for(CheckPiece cp:result){
-									for(Move m:allmoves){
-										for(Move cpm:cp.getM()){
-											if(!cpm.equals(m)){
-												ischeckmate=true;
-											}
-											else if(cpm.equals(m)){
-												ischeckmate=false;
-												break checkloop;
-											}
-										}
-									}
+							else if((cp.getM().size()==1) && (m.getID().contains("K"))){
+								String s=newboard[kingloc[0]][kingloc[1]].move(newboard, kingloc[0],kingloc[1], m.getI(), m.getJ());
+								System.out.println("S: "+s);
+								if(s!=null){
+									ischeckmate=true;
+								}
+								else{
+									ischeckmate=false;
+									break checkloop;
 								}
 							}
-							
-						}
-					}
-					break;
-				case 2:
-					//Left
-					if(kingloc[1]-1>=0){
-						temploc[0]=kingloc[0];
-						temploc[1]=kingloc[1]-1;
-						//System.out.println(temploc[0]+" "+temploc[1]);
-						if(newboard[temploc[0]][temploc[1]] instanceof BoardNull){
-							//System.out.println("\nLeft");
-							result=isInCheck(temploc);
-							if(!(result.isEmpty())){
-								Set<Move> allmoves=getAllMoves(color);
-								checkloop:
-								for(CheckPiece cp:result){
-									for(Move m:allmoves){
-										for(Move cpm:cp.getM()){
-											if(!cpm.equals(m)){
-												ischeckmate=true;
-											}
-											else if(cpm.equals(m)){
-												ischeckmate=false;
-												break checkloop;
-											}
-										}
-									}
-								}
-							}
-							
-						}
-					}
-					break;
-				case 3:
-					//Right
-					if(kingloc[1]+1<=7){
-						temploc[0]=kingloc[0];
-						temploc[1]=kingloc[1]+1;
-						//System.out.println(temploc[0]+" "+temploc[1]);
-						if(newboard[temploc[0]][temploc[1]] instanceof BoardNull){
-							//System.out.println("\nRight");
-							result=isInCheck(temploc);
-							if(!(result.isEmpty())){
-								Set<Move> allmoves=getAllMoves(color);
-								checkloop:
-								for(CheckPiece cp:result){
-									for(Move m:allmoves){
-										for(Move cpm:cp.getM()){
-											//System.out.println("CPM: "+cpm);
-											//System.out.println("M: "+m);
-											if(!cpm.equals(m)){
-												ischeckmate=true;
-											}
-											else if(cpm.equals(m)){
-												ischeckmate=false;
-												break checkloop;
-											}
-										}
-									}
-								}
-							}
-							
-						}
-					}
-					break;
-				case 4:
-					//Up Left
-					if(kingloc[0]-1>=0 && kingloc[1]-1>=0){
-						temploc[0]=kingloc[0]-1;
-						temploc[1]=kingloc[1]-1;
-						//System.out.println(temploc[0]+" "+temploc[1]);
-						if(newboard[temploc[0]][temploc[1]] instanceof BoardNull){
-							//System.out.println("\nUp Left");
-							result=isInCheck(temploc);
-							if(!(result.isEmpty())){
-								Set<Move> allmoves=getAllMoves(color);
-								checkloop:
-								for(CheckPiece cp:result){
-									for(Move m:allmoves){
-										for(Move cpm:cp.getM()){
-											if(!cpm.equals(m)){
-												ischeckmate=true;
-											}
-											else if(cpm.equals(m)){
-												ischeckmate=false;
-												break checkloop;
-											}
-										}
-									}
-								}
-							}
-							
-						}
-					}
-					break;
-				case 5:
-					//Up Right
-					if(kingloc[0]-1>=0 && kingloc[1]+1<=7){
-						temploc[0]=kingloc[0]-1;
-						temploc[1]=kingloc[1]+1;
-						//System.out.println(temploc[0]+" "+temploc[1]);
-						if(newboard[temploc[0]][temploc[1]] instanceof BoardNull){
-							//System.out.println("\nUp Right");
-							result=isInCheck(temploc);
-							if(!(result.isEmpty())){
-								Set<Move> allmoves=getAllMoves(color);
-								checkloop:
-								for(CheckPiece cp:result){
-									for(Move m:allmoves){
-										for(Move cpm:cp.getM()){
-											System.out.println("CPM: "+cpm);
-											System.out.println("M: "+m);
-											if(!cpm.equals(m)){
-												ischeckmate=true;
-											}
-											else if(cpm.equals(m)){
-												ischeckmate=false;
-												break checkloop;
-											}
-											System.out.println("Check: "+ischeckmate);
-										}
-									}
-								}
-							}
-							
-						}
-					}
-					break;
-				case 6:
-					//Down Left
-					if(kingloc[0]+1<=7 && kingloc[1]-1>=0){
-						temploc[0]=kingloc[0]+1;
-						temploc[1]=kingloc[1]-1;
-						//System.out.println(temploc[0]+" "+temploc[1]);
-						if(newboard[temploc[0]][temploc[1]] instanceof BoardNull){
-							//System.out.println("\nDown Left");
-							result=isInCheck(temploc);
-							if(!(result.isEmpty())){
-								Set<Move> allmoves=getAllMoves(color);
-								checkloop:
-								for(CheckPiece cp:result){
-									for(Move m:allmoves){
-										for(Move cpm:cp.getM()){
-											if(!cpm.equals(m)){
-												ischeckmate=true;
-											}
-											else if(cpm.equals(m)){
-												ischeckmate=false;
-												break checkloop;
-											}
-										}
-									}
-								}
-							}
-							
-						}
-					}
-					break;
-				case 7:
-					//Down Right
-					if(kingloc[0]+1<=7 && kingloc[1]+1<=7){
-						temploc[0]=kingloc[0]+1;
-						temploc[1]=kingloc[1]+1;
-						//System.out.println(temploc[0]+" "+temploc[1]);
-						if(newboard[temploc[0]][temploc[1]] instanceof BoardNull){
-							//System.out.println("\nDown Right");
-							result=isInCheck(temploc);
-							if(!(result.isEmpty())){
-								Set<Move> allmoves=getAllMoves(color);
-								checkloop:
-								for(CheckPiece cp:result){
-									for(Move m:allmoves){
-										for(Move cpm:cp.getM()){
-											if(!cpm.equals(m)){
-												ischeckmate=true;
-											}
-											else if(cpm.equals(m)){
-												ischeckmate=false;
-												break checkloop;
-											}
-										}
-									}
-								}
+							else{
+								ischeckmate=false;
+								break checkloop;
 							}
 						}
+						System.out.println("IsCheckmate: "+ischeckmate);
 					}
-					break;
+				}
 			}
 		}
 		System.out.println(ischeckmate);
@@ -536,14 +332,15 @@ public class Board {
 		}
 		return null;
 	}
+		
 	
-	public static Set<CheckPiece> isInCheck(int[] kingloc){
+	public static Set<CheckPiece> isInCheck(int[] kingloc,char color){
 		Set<CheckPiece> locofCheck=new LinkedHashSet<CheckPiece>();
 		int d=1;
 		int e=1;
 		int srcrow=kingloc[0];
 		int srccol=kingloc[1];
-		Piece king=newboard[kingloc[0]][kingloc[1]];
+		Piece king= newboard[kingloc[0]][kingloc[1]];
 		Set<Move> pathtocheck=new LinkedHashSet<Move>();
 		
 		//isInCheck by Bishop or Queen?
@@ -675,6 +472,7 @@ public class Board {
     			newboard[r][c].location[1]=c;
     			pathtocheck.add(new Move(r,c));
     			if(!pathtocheck.isEmpty()) locofCheck.add(new CheckPiece(newboard[r][c],new ArrayList<Move>(pathtocheck)));
+    			//System.out.print("Location of check:"+locofCheck);
     		}
     		else if(((!(newboard[r][c] instanceof BoardNull)) && (newboard[r][c].color==king.color))||(((newboard[r][c] instanceof Pawn)) && (newboard[r][c].color!=king.color))){
     			break;
@@ -805,6 +603,9 @@ public class Board {
 		for(int i=0;i<8;i++){
 			for(int j=0;j<8;j++){
 				if(newboard[i][j].color==color){
+					if(newboard[i][j].ID.contains("K")){
+						//System.out.println(newboard[i][j].ID+" "+newboard[i][j].getAllMoves(newboard));
+					}
 					//System.out.println(newboard[i][j].ID+" "+newboard[i][j].getAllMoves(newboard));
 					allmoves.addAll(newboard[i][j].getAllMoves(newboard));
 				}

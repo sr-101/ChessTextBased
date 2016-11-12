@@ -173,7 +173,7 @@ public class Pawn extends Piece{
 				moves.add(new Move(location, ID, location[0]-1,location[1]-1));
 			}
 		}
-		System.out.println("Pawn Possible Moves: "+moves);
+		//System.out.println("Pawn Possible Moves: "+moves);
 		return moves;
 	}
 	
